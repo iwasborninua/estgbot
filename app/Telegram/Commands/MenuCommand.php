@@ -14,13 +14,13 @@ class MenuCommand extends Command
     public function handle()
     {
         $request = request();
+        Log::info($request->text);
 
-
-        if($request->text == TelegramConstants::MENU){
+        if ($request->text == TelegramConstants::MENU) {
             $this->replyWithMessage([
                 'text' => 'TelegramConstants',
             ]);
-        }else{
+        } else {
             $this->replyWithMessage([
                 'text' => 'hardcoded text',
             ]);
