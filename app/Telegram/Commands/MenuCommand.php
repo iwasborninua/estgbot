@@ -2,6 +2,7 @@
 
 namespace App\Telegram\Commands;
 
+use App\Telegram\TelegramConstants;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Commands\Command;
 
@@ -12,10 +13,18 @@ class MenuCommand extends Command
 
     public function handle()
     {
-        Log::info(request());
+        $request = request();
 
-        $this->replyWithMessage([
-            'text' => 'hardcoded text',
-        ]);
+
+        if($request->text == TelegramConstants::MENU){
+            $this->replyWithMessage([
+                'text' => 'TelegramConstants',
+            ]);
+        }else{
+            $this->replyWithMessage([
+                'text' => 'hardcoded text',
+            ]);
+        }
+
     }
 }
