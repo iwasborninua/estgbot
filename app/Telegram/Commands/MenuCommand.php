@@ -13,7 +13,7 @@ class MenuCommand extends Command
 
     public function handle()
     {
-        $request = request();
+        $request = request()->message;
         Log::info($request->text);
 
         if ($request->text == TelegramConstants::MENU) {
