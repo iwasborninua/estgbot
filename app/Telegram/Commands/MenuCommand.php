@@ -2,6 +2,7 @@
 
 namespace App\Telegram\Commands;
 
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Commands\Command;
 
 class MenuCommand extends Command
@@ -11,7 +12,7 @@ class MenuCommand extends Command
 
     public function handle()
     {
-        $text = 'Ось що у нас є:';
+        Log::info(request());
 
         $this->replyWithMessage([
             'text' => 'hardcoded text',
