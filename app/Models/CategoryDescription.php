@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class CategoryDescription extends Model
 {
-    use HasFactory;
 
     protected $table = 'oc_category_description';
     protected $primaryKey = 'category_id';

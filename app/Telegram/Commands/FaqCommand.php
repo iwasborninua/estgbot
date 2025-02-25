@@ -12,6 +12,7 @@ class FaqCommand extends Command
 {
     protected string $name = 'faq';
 
+    protected array $aliases = ['❓ FAQ'];
     protected string $description = 'Часто задаваемуе вопросы';
 
     public function handle()
