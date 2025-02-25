@@ -21,41 +21,25 @@ class Keyboards
     }
 
 
-    //todo поменять на цикл
-    public static function catalogKeyboards()
+    public static function categoryKeyboards($data, $rowCount = 3)
     {
-        $count = ProductToCategory::query()
-            ->selectRaw('count(product_id) as count, category_id')
-            ->with('category')
-            ->whereHas('category', function ($q) {
-                $q->where('status', 1)->where('main_category', 1);
-            })->groupBy(['category_id'])->get()->keyBy('category_id')->toArray();
+        $i = 1;
+        $count = count($data) - 1;
+        $res = $rowData = [];
+        foreach ($data as $k => $category) {
+            $rowData[] = [
+                'text' => $category->description[0]?->name . " ({$category->products_count})",
+                'callback_data' => "query=category&category={$category->category_id}"
+            ];
+            if ($i === $rowCount or $k === $count) {
+                $res[] = $rowData;
+                $i = 1;
+                $rowData = [];
+            } else {
+                $i++;
+            }
+        }
 
-        return [
-            [
-                ['text' => 'Фемінізовані сорти' . " ({$count[74]['count']})", 'callback_data' => 'category=74'],
-                ['text' => 'Автоквітучі фемінізовані сорти' . " ({$count[73]['count']})", 'callback_data' => 'category=73'],
-                ['text' => 'Сувенірна продукція' . " ({$count[63]['count']})", 'callback_data' => 'category=63']
-            ],
-            [
-                ['text' => 'Фотоперіодичні сорти' . " ({$count[75]['count']})", 'callback_data' => 'category=75'],
-                ['text' => 'Автоквітучі сорти' . " ({$count[76]['count']})", 'callback_data' => 'category=76'],
-                ['text' => 'Добрива' . " ({$count[98]['count']})", 'callback_data' => 'category=98']
-            ],
-            [
-                ['text' => 'Друкована продукція' . " ({$count[99]['count']})", 'callback_data' => 'category=99'],
-                ['text' => 'Медичний канабіс' . " ({$count[174]['count']})", 'callback_data' => 'category=174'],
-                ['text' => 'Їстівна продукція' . " ({$count[196]['count']})", 'callback_data' => 'category=196']
-            ],
-            [
-                ['text' => 'Гідропонні системи' . " ({$count[207]['count']})", 'callback_data' => 'category=207'],
-                ['text' => 'Вентиляція' . " ({$count[209]['count']})", 'callback_data' => 'category=209'],
-                ['text' => 'Управління та автоматика' . " ({$count[210]['count']})", 'callback_data' => 'category=210']
-            ],
-            [
-                ['text' => 'Вимірювальна техніка' . " ({$count[211]['count']})", 'callback_data' => 'category=211'],
-                ['text' => 'Обладнання' . " ({$count[214]['count']})", 'callback_data' => 'category=214'],
-            ],
-        ];
+        return $res;
     }
 }

@@ -1,26 +1,29 @@
 <?php
 
-namespace App\Telegram\Commands;
+namespace App\Telegram\Queries;
 
 use App\Models\Category;
-use App\Models\CategoryDescription;
-use App\Models\ProductToCategory;
 use App\Telegram\Keyboards\Keyboards;
-use App\Telegram\TelegramService;
 use Illuminate\Support\Facades\Log;
-use Telegram\Bot\Commands\Command;
 use Telegram\Bot\Keyboard\Keyboard;
+use Telegram\Bot\Objects\CallbackQuery;
 
-class MenuCommand extends Command
+class MenuQuery extends BaseQuery
 {
-    protected string $name = 'menu';
-    protected string $description = 'меню команда';
+    public static string $name = 'menu';
+
+    public function __construct(CallbackQuery $query, array $params)
+    {
+        parent::__construct($query, $params);
+    }
 
     public function handle()
     {
         $menu = Category::menuQuery();
 
-        $this->replyWithMessage([
+        $this->telegram::editMessageText([
+            'chat_id' => $this->chatId,
+            'message_id' => $this->messageId,
             'text' => "Ось що у нас є:",
             'reply_markup' => Keyboard::make([
                 'inline_keyboard' => Keyboards::categoryKeyboards($menu)

@@ -16,7 +16,7 @@ class StartCommand extends Command
     public function handle()
     {
         Log::info("Команда /start вызвана");
-        
+
         // Первое сообщение (форматировать не стоит...)
         $this->replyWithMessage([
             'text' => "Це офіційний магазин виробника сортового насіння конопель Errors Seeds
@@ -35,7 +35,7 @@ bit.ly/ErrorsSeedsShop
             'text' => "Підписуйтесь на наші соціальні мережі, щоб завжди бути в курсі актуальних новин та пропозицій:",
             'reply_markup' => Keyboard::make([
                 'inline_keyboard' => [
-                    [['text' => '📢 Telegram-канал', 'url' => 'https://t.me/Michael_McNamara']],
+                    [['text' => '📢 TelegramService-канал', 'url' => 'https://t.me/Michael_McNamara']],
                     [['text' => '📸 Instagram', 'url' => 'https://t.me/Michael_McNamara']],
                     [['text' => '📘 Facebook', 'url' => 'https://t.me/Michael_McNamara']],
                     [['text' => '🌱 ES Grower Club', 'url' => 'https://t.me/Michael_McNamara']],
@@ -44,4 +44,4 @@ bit.ly/ErrorsSeedsShop
         ]);
     }
 }
-// Compare this snippet from app/Telegram/Commands/StartCommand.php:
+// Compare this snippet from app/TelegramService/Commands/StartCommand.php:

@@ -17,7 +17,7 @@ class TelegramServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Log::info('Регистрация команд Telegram...');
+        Log::info('Регистрация команд TelegramService...');
 
         Telegram::addCommands([
             StartCommand::class,

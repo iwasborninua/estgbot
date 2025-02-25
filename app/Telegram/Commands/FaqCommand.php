@@ -64,4 +64,4 @@ https://novaposhta.ua/tracking';
         ]);
     }
 }
-// Compare this snippet from app/Telegram/Commands/StartCommand.php:
+// Compare this snippet from app/TelegramService/Commands/StartCommand.php:
