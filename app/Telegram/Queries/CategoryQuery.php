@@ -71,28 +71,14 @@ class CategoryQuery extends BaseQuery
         $items[] = $nav;
         $items[] = [['text' => 'Назад', 'callback_data' => "query=menu"]];
 
-        if (array_key_exists('deletemessage', $this->params)) {
-            $this->telegram::deleteMessage([
-                'chat_id' => $this->chatId,
-                'message_id' => $this->messageId
-            ]);
-            $this->telegram::sendMessage([
-                'chat_id' => $this->chatId,
-                'text' => $this->category->description[0]?->name,
-                'reply_markup' => Keyboard::make([
-                    'inline_keyboard' => $items
-                ])
-            ]);
-        } else {
-            $this->telegram::editMessageText([
-                'chat_id' => $this->chatId,
-                'message_id' => $this->messageId,
-                'text' => $this->category->description[0]?->name,
-                'reply_markup' => Keyboard::make([
-                    'inline_keyboard' => $items
-                ])
-            ]);
-        }
 
+        $this->telegram::editMessageText([
+            'chat_id' => $this->chatId,
+            'message_id' => $this->messageId,
+            'text' => $this->category->description[0]?->name,
+            'reply_markup' => Keyboard::make([
+                'inline_keyboard' => $items
+            ])
+        ]);
     }
 }

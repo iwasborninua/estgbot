@@ -31,19 +31,31 @@ class ProductQuery extends BaseQuery
     {
         $description = $this->product->description()->where('language_id', 3)->first();
 
-        $this->telegram::editMessageMedia([
+//        $this->telegram::editMessageMedia([
+//            'chat_id' => $this->chatId,
+//            'message_id' => $this->messageId,
+//            'media' => json_encode(new InputMedia([
+//                'type' => 'photo',
+////                'media' => url('image/' . $this->product->image),
+//                'media' => "https://api.errors-seeds.com.ua/image/catalog/product_images/errors_seeds_gold/glato-feminised-gold.jpg",
+//                'parse_mode' => 'html',
+//                'caption' => $description->name,
+//            ])),
+//
+//            'reply_markup' => Keyboard::make([
+//                'inline_keyboard' => [[['text' => 'Назад',
+//                    'callback_data' =>"deletemessage=1&query=category&category=" . $this->params['category']]]]
+//            ])
+//        ]);
+        $href = url('image/' . $this->product->image);
+        $this->telegram::editMessageText([
             'chat_id' => $this->chatId,
             'message_id' => $this->messageId,
-            'media' => json_encode(new InputMedia([
-                'type' => 'photo',
-                'media' => url('image/' . $this->product->image),
-//                'media' => "https://api.errors-seeds.com.ua/image/catalog/product_images/errors_seeds_gold/glato-feminised-gold.jpg",
-                'parse_mode' => 'html',
-                'caption' => $description->name,
-            ])),
-
+            'text' => "<a href='$href'>$description->name</a>",
+            'parse_mode' => 'HTML',
             'reply_markup' => Keyboard::make([
-                'inline_keyboard' => [[['text' => 'Назад', 'callback_data' =>"deletemessage=1&query=category&category=" . $this->params['category']]]]
+                'inline_keyboard' => [[['text' => 'Назад',
+                    'callback_data' =>"query=category&category=" . $this->params['category']]]]
             ])
         ]);
     }
