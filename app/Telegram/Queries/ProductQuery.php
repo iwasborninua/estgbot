@@ -29,6 +29,8 @@ class ProductQuery extends BaseQuery
 
     public function handle()
     {
+        $description = $this->product->description()->where('language_id', 3)->first();
+
         $this->telegram::editMessageMedia([
             'chat_id' => $this->chatId,
             'message_id' => $this->messageId,
@@ -37,7 +39,7 @@ class ProductQuery extends BaseQuery
                 'media' => url('image/' . $this->product->image),
 //                'media' => "https://api.errors-seeds.com.ua/image/catalog/product_images/errors_seeds_gold/glato-feminised-gold.jpg",
                 'parse_mode' => 'html',
-                'caption' => "Ось що у нас є:",
+                'caption' => $description->name,
             ])),
 
             'reply_markup' => Keyboard::make([
