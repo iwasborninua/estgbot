@@ -46,7 +46,7 @@ class CategoryQuery extends BaseQuery
         foreach ($products as $product) {
             $items[] = [[
                 'text' => $product->description[0]->name . ' вiд ' . round($product->price) . '₴',
-                'callback_data' => 'query=product&product=' . $product->product_id . "&category=" . $this->category->category_id
+                'callback_data' => 'query=product&product=' . $product->product_id . "&category=" . $this->category->category_id . "&page=$page"
             ]];
         }
 
