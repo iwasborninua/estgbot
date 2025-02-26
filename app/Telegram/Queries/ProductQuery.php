@@ -29,19 +29,19 @@ class ProductQuery extends BaseQuery
 
     public function handle()
     {
-        Log::info(url('image/' . $this->product->image));
         $this->telegram::editMessageMedia([
             'chat_id' => $this->chatId,
             'message_id' => $this->messageId,
             'media' => json_encode(new InputMedia([
                 'type' => 'photo',
                 'media' => url('image/' . $this->product->image),
-                'parse_mode' => 'html'
-
+//                'media' => "https://api.errors-seeds.com.ua/image/catalog/product_images/errors_seeds_gold/glato-feminised-gold.jpg",
+                'parse_mode' => 'html',
+                'caption' => "Ось що у нас є:",
             ])),
-            'text' => "Ось що у нас є:",
+
             'reply_markup' => Keyboard::make([
-                'inline_keyboard' => [[['text' => 'Назад', 'callback_data' => "query=menu"]]]
+                'inline_keyboard' => [[['text' => 'Назад', 'callback_data' =>"deletemessage=1&query=category&category=" . $this->params['category']]]]
             ])
         ]);
     }
