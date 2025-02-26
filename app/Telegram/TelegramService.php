@@ -6,6 +6,7 @@ use App\Telegram\Queries\BaseQuery;
 use App\Telegram\Queries\CategoryQuery;
 use App\Telegram\Queries\EmptyQuery;
 use App\Telegram\Queries\MenuQuery;
+use App\Telegram\Queries\ProductQuery;
 use http\Params;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;
@@ -23,6 +24,7 @@ class TelegramService
         'menu' => MenuQuery::class,
         'category' => CategoryQuery::class,
         'empty' => EmptyQuery::class,
+        'product' => ProductQuery::class,
     ];
 
     public function messageHandler(Update $update)

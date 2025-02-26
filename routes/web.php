@@ -1,15 +1,6 @@
 <?php
 
-use App\Http\Controllers\QueryController;
-use App\Models\Category;
-use App\Models\CategoryDescription;
-use App\Models\Product;
-use App\Models\ProductToCategory;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Telegram\Bot\Laravel\Facades\Telegram;
 
 
 /*
