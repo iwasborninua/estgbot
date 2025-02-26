@@ -51,9 +51,9 @@ class ProductQuery extends BaseQuery
         $this->telegram::editMessageText([
             'chat_id' => $this->chatId,
             'message_id' => $this->messageId,
-            'text' => "<a href='#'>$description->name</a>",
+            'text' => "<a href='$href'>$description->name</a>",
             'parse_mode' => 'HTML',
-            'link_preview_options' => ['url' => $href],
+            'link_preview_options' => json_encode(['url' => $href]),
             'reply_markup' => Keyboard::make([
                 'inline_keyboard' => [[['text' => 'Назад',
                     'callback_data' => "query=category&category=" . $this->params['category'] . "&page=" . $this->params['page']]]]
