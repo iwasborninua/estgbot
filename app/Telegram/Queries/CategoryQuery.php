@@ -20,7 +20,7 @@ class CategoryQuery extends BaseQuery
         parent::__construct($query, $params);
 
         $this->category = Category::query()->with('description', function ($q) {
-            $q->where('language_id', 3);
+            $q->where('language_id', config('constants.lang'));
         })
             ->where('category_id', $this->params['category'])
             ->first();
@@ -36,7 +36,7 @@ class CategoryQuery extends BaseQuery
         $products = $this->category->products()
             ->select(['oc_product.product_id', 'price'])
             ->with('description', function ($q) {
-                $q->select(['product_id', 'name'])->where('language_id', 3);
+                $q->select(['product_id', 'name'])->where('language_id', config('constants.lang'));
             })
             ->where('quantity', '>', 0)
             ->paginate(10, ["*"], 'page', $page);

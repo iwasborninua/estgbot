@@ -3,6 +3,7 @@
 namespace App\Telegram;
 
 use App\Telegram\Queries\BaseQuery;
+use App\Telegram\Queries\Cart\AddToCartQuery;
 use App\Telegram\Queries\CategoryQuery;
 use App\Telegram\Queries\EmptyQuery;
 use App\Telegram\Queries\MenuQuery;
@@ -25,6 +26,7 @@ class TelegramService
         'category' => CategoryQuery::class,
         'empty' => EmptyQuery::class,
         'product' => ProductQuery::class,
+        'add-to-cart' => AddToCartQuery::class,
     ];
 
     public function messageHandler(Update $update)
@@ -41,7 +43,6 @@ class TelegramService
         $query = $update->getRelatedObject();
 
         parse_str($query->data, $params);
-
         if (array_key_exists('query', $params) and array_key_exists($params['query'], $this->queries)) {
             $class = $this->queryClassCreator($this->queries[$params['query']], $query, $params);
             return $class->handle();

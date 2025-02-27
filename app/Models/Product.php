@@ -15,9 +15,13 @@ class Product extends Model
         return $this->hasMany(ProductDescription::class, 'product_id', 'product_id');
     }
 
-    public function ukrDescription()
+    public function attributes()
     {
-        return $this->hasOne(ProductDescription::class, 'product_id', 'product_id')->where('language_id', 3);
+        return $this->hasMany(ProductAttribute::class, 'product_id', 'product_id');
     }
 
+    public function options()
+    {
+        return $this->hasMany(ProductOption::class, 'product_id', 'product_id');
+    }
 }

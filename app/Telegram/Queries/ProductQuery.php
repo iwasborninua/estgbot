@@ -29,8 +29,36 @@ class ProductQuery extends BaseQuery
 
     public function handle()
     {
-        $description = $this->product->description()->where('language_id', 3)->first();
+        $text = PHP_EOL;
+        $items = [];
+        $description = $this->product->description()->where('language_id', config('constants.lang'))->first();
+        $attributes = $this->product->attributes()->with(['attributeDescription'])->where('language_id', 3)->get(['text', 'attribute_id']);
+        $options = $this->product->options()
+            ->with('values', function ($q) {
+                $q->select(['product_option_id', 'quantity', 'price', 'option_value_id']);
+            })
+            ->with('values.description')
+            ->get(['product_id', 'product_option_id']);
 
+        foreach ($attributes as $attribute) {
+            $text .= $attribute->attributeDescription->name . ": " . $attribute->text . PHP_EOL;
+        }
+
+        foreach ($options as $option) {
+            foreach ($option->values->sortBy('quantity') as $value) {
+                $price = $this->product->price + $value->price;
+                $items[] = [[
+                    'text' => "Придбати {$value->description->name} за $price",
+                    'callback_data' => "query=add-to-cart&category=" . $this->params['category'] . "&page=" . $this->params['page'] .
+                        '&productOptionValue=' . $value->option_value_id
+                ]];
+            }
+        }
+
+        $items[] = [[
+            'text' => 'Назад',
+            'callback_data' => "query=category&category=" . $this->params['category'] . "&page=" . $this->params['page']
+        ]];
 //        $this->telegram::editMessageMedia([
 //            'chat_id' => $this->chatId,
 //            'message_id' => $this->messageId,
@@ -51,12 +79,11 @@ class ProductQuery extends BaseQuery
         $this->telegram::editMessageText([
             'chat_id' => $this->chatId,
             'message_id' => $this->messageId,
-            'text' => "<a href='$href'>$description->name</a>",
+            'text' => "<a href='$href'>$description->name</a> $text",
             'parse_mode' => 'HTML',
             'link_preview_options' => json_encode(['url' => $href, 'prefer_small_media' => true]),
             'reply_markup' => Keyboard::make([
-                'inline_keyboard' => [[['text' => 'Назад',
-                    'callback_data' => "query=category&category=" . $this->params['category'] . "&page=" . $this->params['page']]]]
+                'inline_keyboard' => $items
             ])
         ]);
     }
