@@ -53,7 +53,7 @@ class ProductQuery extends BaseQuery
             'message_id' => $this->messageId,
             'text' => "<a href='$href'>$description->name</a>",
             'parse_mode' => 'HTML',
-            'link_preview_options' => json_encode(['url' => $href]),
+            'link_preview_options' => json_encode(['url' => $href, 'prefer_small_media' => true]),
             'reply_markup' => Keyboard::make([
                 'inline_keyboard' => [[['text' => 'Назад',
                     'callback_data' => "query=category&category=" . $this->params['category'] . "&page=" . $this->params['page']]]]
