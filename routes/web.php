@@ -18,6 +18,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
+    $product = Product::find(285);
+    $options = $product->options()
+        ->with('values', function ($q) {
+            $q->select(['product_option_id', 'quantity', 'price', 'option_value_id', 'product_option_value_id']);
+        })
+        ->with('values.description')
+        ->get(['product_id', 'product_option_id']);
+    dd($options);
 });
 
 Route::get('/test', function () {

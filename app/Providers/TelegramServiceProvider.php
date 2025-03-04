@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Telegram\TelegramService;
+use App\Telegram\TelegramServiceInterface;
 use Illuminate\Support\ServiceProvider;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use App\Telegram\Commands\StartCommand;
@@ -27,5 +29,14 @@ class TelegramServiceProvider extends ServiceProvider
         ]);
 
         Log::info('Комманды зарегистрированны...');
+    }
+
+    public function register()
+    {
+        $this->app->bind(TelegramServiceInterface::class, function () {
+
+
+            return new TelegramService(Telegram::getWebhookUpdate());
+        });
     }
 }
