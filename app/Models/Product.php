@@ -24,4 +24,19 @@ class Product extends Model
     {
         return $this->hasMany(ProductOption::class, 'product_id', 'product_id');
     }
+
+    public function inCart(): bool
+    {
+        return \Arr::has(\Auth::user()->getCart(), $this->product_id);
+    }
+
+    public function inCartCount()
+    {
+        if ($this->inCart()) {
+            return array_sum(\Auth::user()->getCart()[$this->product_id]);
+        } else {
+            \Log::warning("product [$this->product_id] not in cart, but trying to get count of options from cart");
+            return 0;
+        }
+    }
 }

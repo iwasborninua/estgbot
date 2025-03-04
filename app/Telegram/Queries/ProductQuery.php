@@ -33,9 +33,10 @@ class ProductQuery extends BaseQuery
         $items = [];
         $description = $this->product->description()->where('language_id', config('constants.lang'))->first();
         $attributes = $this->product->attributes()->with(['attributeDescription'])->where('language_id', 3)->get(['text', 'attribute_id']);
+
         $options = $this->product->options()
             ->with('values', function ($q) {
-                $q->select(['product_option_id', 'quantity', 'price', 'option_value_id', 'product_option_value_id']);
+                $q->select(['product_option_id', 'quantity', 'price', 'option_value_id', 'product_option_value_id', 'product_id']);
             })
             ->with('values.description')
             ->get(['product_id', 'product_option_id']);
@@ -47,9 +48,8 @@ class ProductQuery extends BaseQuery
         foreach ($options as $option) {
             foreach ($option->values->sortBy('description.name') as $value) {
                 $price = $this->product->price + $value->price;
-                Log::info($value->product_option_value_id);
                 $items[] = [[
-                    'text' => "Придбати {$value->description->name} за $price",
+                    'text' => ($value->inCart() ? "(" . $value->inCartCount() . ") " : "") ."Придбати {$value->description->name} за $price",
                     'callback_data' => "query=atc&category=" . $this->params['category'] . "&page=" . $this->params['page'] .
                         '&pov=' . $value->product_option_value_id . "&product=" . $this->product->product_id
                 ]];
