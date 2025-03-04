@@ -32,7 +32,7 @@ class User extends Authenticatable
 
     public function getCart()
     {
-        if (!cache()->has($this->id)) {
+        if (!cache()->has($this->id . 'cart')) {
             cache()->set($this->id . 'cart', [], 6000);
         }
         return cache()->get($this->id . 'cart');
