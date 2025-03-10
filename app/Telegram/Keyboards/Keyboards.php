@@ -42,4 +42,26 @@ class Keyboards
 
         return $res;
     }
+
+    public static function cartKeyboard()
+    {
+        return [
+            [
+                [
+                    'text' => "✏️ Редагувати",
+                    'callback_data' => "query=edit-cart&cache-cart-message=1"
+                ],
+                [
+                    'text' => "❌ Видалити",
+                    'callback_data' => "query=delete-cart"
+                ]
+            ],
+            [
+                [
+                    'text' => "✅ Оформити замовлення",
+                    'callback_data' => "query=make-order"
+                ],
+            ]
+        ];
+    }
 }

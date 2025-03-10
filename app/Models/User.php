@@ -33,13 +33,13 @@ class User extends Authenticatable
     public function getCart()
     {
         if (!cache()->has($this->id . 'cart')) {
-            cache()->set($this->id . 'cart', [], 6000);
+            return [];
         }
         return cache()->get($this->id . 'cart');
     }
 
     public function setCart($cart)
     {
-        cache()->set($this->id . 'cart', $cart, 600);
+        cache()->set($this->id . 'cart', $cart, 60000);
     }
 }

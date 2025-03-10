@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Telegram\Commands\CartCommand;
+use App\Telegram\Handlers\ActionHandler;
+use App\Telegram\Handlers\Handler;
 use App\Telegram\TelegramService;
 use App\Telegram\TelegramServiceInterface;
 use Illuminate\Support\ServiceProvider;
@@ -25,7 +28,8 @@ class TelegramServiceProvider extends ServiceProvider
             StartCommand::class,
             FaqCommand::class,
             ContactsCommand::class,
-            MenuCommand::class
+            MenuCommand::class,
+            CartCommand::class
         ]);
 
         Log::info('Комманды зарегистрированны...');
@@ -34,9 +38,10 @@ class TelegramServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(TelegramServiceInterface::class, function () {
-
-
             return new TelegramService(Telegram::getWebhookUpdate());
+        });
+        $this->app->bind(Handler::class, function () {
+            return new ActionHandler(Telegram::getWebhookUpdate());
         });
     }
 }

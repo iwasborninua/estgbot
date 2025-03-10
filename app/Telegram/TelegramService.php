@@ -2,9 +2,15 @@
 
 namespace App\Telegram;
 
+use App\Models\Product;
+use App\Models\ProductDescription;
+use App\Models\ProductOptionValue;
 use App\Models\User;
+use App\Telegram\Handlers\Handler;
 use App\Telegram\Queries\BaseQuery;
 use App\Telegram\Queries\Cart\AddToCartQuery;
+use App\Telegram\Queries\Cart\EditCartQuery;
+use App\Telegram\Queries\Cart\UpdateCartQuery;
 use App\Telegram\Queries\CategoryQuery;
 use App\Telegram\Queries\EmptyQuery;
 use App\Telegram\Queries\MenuQuery;
@@ -16,6 +22,9 @@ use Telegram\Bot\Objects\Update;
 
 class TelegramService implements TelegramServiceInterface
 {
+    const CART_EDIT_MESSAGE_ID_KEY = 'CART_EDIT_MESSAGE_ID_KEY';
+    const NEXT_ACTION = 'NEXT_ACTION';
+    const NEXT_ACTION_PARAMS = 'NEXT_ACTION_PARAMS';
     private string $type;
 
     public function __construct(private Update $update)
@@ -27,6 +36,7 @@ class TelegramService implements TelegramServiceInterface
         '📘 Меню' => 'menu',
         '📱 Контакти' => 'contacts',
         '❓ FAQ' => 'faq',
+        '🛒 Корзина' => 'cart',
     ];
 
     private array $queries = [
@@ -35,6 +45,8 @@ class TelegramService implements TelegramServiceInterface
         'empty' => EmptyQuery::class,
         'product' => ProductQuery::class,
         'atc' => AddToCartQuery::class,
+        'edit-cart' => EditCartQuery::class,
+        'update-cart' => UpdateCartQuery::class,
     ];
 
     public function handleUpdate()
@@ -56,9 +68,12 @@ class TelegramService implements TelegramServiceInterface
     public function messageHandler(Update $update)
     {
         if (array_key_exists($update->message->text, self::TEXT_COMMANDS)) {
+            $this->clearNextAction();
             return Telegram::triggerCommand(TelegramService::TEXT_COMMANDS[$update->message->text], $update);
         }
-
+        if ($this->hasNextAction()) {
+            return $this->handleNextAction();
+        }
         Telegram::processCommand($update);
     }
 
@@ -91,5 +106,67 @@ class TelegramService implements TelegramServiceInterface
         Auth::login($user);
     }
 
+
+    public static function cartText()
+    {
+        $cart = Auth::user()->getCart();
+
+        if (empty($cart)) return "";
+
+        $total = 0;
+        $text = "<b>Кошик</b>" . PHP_EOL . PHP_EOL . "-----" . PHP_EOL;
+        foreach ($cart as $productId => $options) {
+            $productPrice = Product::query()->where('product_id', $productId)->value('price');
+            $name = ProductDescription::query()
+                ->where('product_id', $productId)
+                ->where('language_id', config('constants.lang'))
+                ->value('name');
+
+            $text .= "<b>$name</b>" . PHP_EOL;
+
+            $optionsData = ProductOptionValue::query()
+                ->with('description', function ($q) {
+                    $q->select(['name', 'option_value_id']);
+                })
+                ->whereIn('product_option_value_id', array_keys($options))
+                ->get(['product_option_value_id', 'quantity', 'option_value_id', 'price']);
+
+            foreach ($optionsData as $data) {
+                $price = $productPrice + $data->price;
+                $count = $options[$data->product_option_value_id];
+                $sum = $count * $price;
+                $total += $sum;
+                $text .= $data->description->name . ": " . $count . "шт. x " . $price . "₴ = " . $sum . "₴" . PHP_EOL;
+            }
+            $text .= PHP_EOL;
+        }
+        $text .= "-----" . PHP_EOL . "<b>Загалом:</b> {$total}₴";
+
+        return $text;
+    }
+
+    public function handleNextAction()
+    {
+        $actonHandler = app(Handler::class);
+        $method = cache()->get(Auth::id() . $this::NEXT_ACTION);
+        $this->clearNextAction();
+        return $actonHandler->{$method}();
+    }
+
+    public function hasNextAction(): bool
+    {
+        return cache()->has(Auth::id() . $this::NEXT_ACTION);
+    }
+
+    public static function setNextAction(string $method, array $params = []): void
+    {
+        cache()->set(Auth::id() . self::NEXT_ACTION, $method);
+        cache()->set(Auth::id() . self::NEXT_ACTION_PARAMS, $params);
+    }
+
+    public function clearNextAction(): void
+    {
+        cache()->forget(Auth::id() . self::NEXT_ACTION);
+    }
 }
 

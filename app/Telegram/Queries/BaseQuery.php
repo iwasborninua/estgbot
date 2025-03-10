@@ -20,4 +20,10 @@ abstract class BaseQuery
 
 
     abstract public function handle();
+
+
+    public function cache()
+    {
+
+    }
 }
