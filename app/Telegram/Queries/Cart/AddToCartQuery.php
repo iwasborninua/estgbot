@@ -32,7 +32,7 @@ class AddToCartQuery extends BaseQuery
 
         Auth::user()->setCart($cart);
 
-        $this->telegram::answerCallbackQuery(['text' => "Додано до кошика (у розробцi)", 'callback_query_id' => $this->callbackQueryId]);
+        $this->telegram::answerCallbackQuery(['text' => "Додано до кошика", 'callback_query_id' => $this->callbackQueryId]);
 
         $message = $this->query->getMessage();
         $keys = $message->reply_markup->inline_keyboard->toArray();
