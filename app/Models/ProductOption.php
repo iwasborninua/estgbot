@@ -16,4 +16,8 @@ class ProductOption extends Model
             ->where('status', 1);
     }
 
+    public function description()
+    {
+        return $this->hasMany(OptionDescription::class, 'option_id', 'option_id');
+    }
 }

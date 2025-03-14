@@ -1,9 +1,5 @@
 <?php
 
-use App\Models\Product;
-use App\Models\ProductOptionValue;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,10 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-
-dd('dawd');
-});
+Route::get('/product-csv',[\App\Http\Controllers\ExportProductsController::class, 'csv']);
 
 Route::get('/test', function () {
 });

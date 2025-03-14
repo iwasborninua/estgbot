@@ -59,4 +59,9 @@ class Product extends Model
             return 0;
         }
     }
+
+    public function category()
+    {
+        return $this->belongsToMany(Category::class, 'oc_product_to_category', 'product_id', 'category_id', 'product_id', 'category_id');
+    }
 }
