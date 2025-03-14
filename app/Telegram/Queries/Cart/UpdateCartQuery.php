@@ -45,7 +45,17 @@ class UpdateCartQuery extends BaseQuery
     private function minus()
     {
         $cart = Auth::user()->getCart();
-        $cart[$this->params['product']][$this->params['pov']]--;
+        if ($cart[$this->params['product']][$this->params['pov']] === 1) {
+
+            unset($cart[$this->params['product']][$this->params['pov']]);
+
+            if (count($cart[$this->params['product']]) === 0) {
+                unset($cart[$this->params['product']]);
+            }
+
+        } else {
+            $cart[$this->params['product']][$this->params['pov']]--;
+        }
         Auth::user()->setCart($cart);
 
         $this->params['next-edit'] = 1;

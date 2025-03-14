@@ -21,7 +21,7 @@ class Keyboards
     }
 
 
-    public static function categoryKeyboards($data, $rowCount = 3)
+    public static function categoryKeyboards($data, $rowCount = 2)
     {
         $i = 1;
         $count = count($data) - 1;

@@ -42,4 +42,22 @@ class User extends Authenticatable
     {
         cache()->set($this->id . 'cart', $cart, 60000);
     }
+
+    public function getDelivery()
+    {
+        if (!cache()->has($this->id . 'delivery')) {
+            return [];
+        }
+        return cache()->get($this->id . 'delivery');
+    }
+
+    public function setDelivery(array $delivery)
+    {
+        cache()->set($this->id . 'delivery', $delivery, 60000);
+    }
+
+    public function createOrder()
+    {
+        Log::alert($this->getDelivery());
+    }
 }

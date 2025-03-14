@@ -9,11 +9,21 @@ use App\Models\User;
 use App\Telegram\Handlers\Handler;
 use App\Telegram\Queries\BaseQuery;
 use App\Telegram\Queries\Cart\AddToCartQuery;
+use App\Telegram\Queries\Cart\DeleteCartQuery;
 use App\Telegram\Queries\Cart\EditCartQuery;
+use App\Telegram\Queries\Cart\OrderQuery;
 use App\Telegram\Queries\Cart\UpdateCartQuery;
 use App\Telegram\Queries\CategoryQuery;
 use App\Telegram\Queries\EmptyQuery;
 use App\Telegram\Queries\MenuQuery;
+use App\Telegram\Queries\Order\ConfirmQuery;
+use App\Telegram\Queries\Order\GetNumberQuery;
+use App\Telegram\Queries\Order\PostQuery;
+use App\Telegram\Queries\Order\RepeatNumberQuery;
+use App\Telegram\Queries\Order\SelectFIOQuery;
+use App\Telegram\Queries\Order\SelectPaymentQuery;
+use App\Telegram\Queries\Order\SelectPostQuery;
+use App\Telegram\Queries\Order\TotalQuery;
 use App\Telegram\Queries\ProductQuery;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -25,6 +35,14 @@ class TelegramService implements TelegramServiceInterface
     const CART_EDIT_MESSAGE_ID_KEY = 'CART_EDIT_MESSAGE_ID_KEY';
     const NEXT_ACTION = 'NEXT_ACTION';
     const NEXT_ACTION_PARAMS = 'NEXT_ACTION_PARAMS';
+
+    const NOVAPOST = 'novapost';
+    const UKRPOST = 'ukrpost';
+    const UKRPOST_KZ = 'ukrpost_kz';
+
+    const OVERHEAD_PAYMENT = 'overhead-payment';
+    const PAID = 'paid';
+    const CANCEL = 'Відміна';
     private string $type;
 
     public function __construct(private Update $update)
@@ -47,11 +65,20 @@ class TelegramService implements TelegramServiceInterface
         'atc' => AddToCartQuery::class,
         'edit-cart' => EditCartQuery::class,
         'update-cart' => UpdateCartQuery::class,
+        'delete-cart' => DeleteCartQuery::class,
+        'make-order' => OrderQuery::class,
+        'post' => PostQuery::class,
+        'select-post' => SelectPostQuery::class,
+        'select-fio' => SelectFIOQuery::class,
+        'select-payment' => SelectPaymentQuery::class,
+        'get-number' => GetNumberQuery::class,
+        'repeat-number' => RepeatNumberQuery::class,
+        'total' => TotalQuery::class,
+        'confirm-order' => ConfirmQuery::class,
     ];
 
     public function handleUpdate()
     {
-
         try {
             $method = $this->type . "Handler";
             if (method_exists($this, $method)) {
@@ -86,7 +113,6 @@ class TelegramService implements TelegramServiceInterface
             $class = $this->queryClassCreator($this->queries[$params['query']], $query, $params);
             return $class->handle();
         } else {
-
             Log::warning('Unknown query key or key is not exist');
         }
     }
