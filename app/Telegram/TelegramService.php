@@ -124,10 +124,15 @@ class TelegramService implements TelegramServiceInterface
 
     public function authUser()
     {
-        $data = $this->update->getRelatedObject()->from;
+        $chatId = $this->update->getChat()->id;
+        $data = $this->update->getRelatedObject()->from->toArray();
+        if ($chatId) {
+            $data['chat_id'] = $chatId;
+        }
+        Log::info($data);
         $user = User::query()->updateOrCreate(
-            ['username' => $data->username],
-            $data->toArray()
+            ['username' => $data['username']],
+            $data
         );
         Auth::login($user);
     }

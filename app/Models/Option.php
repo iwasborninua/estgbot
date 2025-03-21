@@ -13,7 +13,8 @@ class Option extends Model
 
     public function description()
     {
-        return $this->hasMany(OptionDescription::class, 'option_id', 'option_id');
+        return $this->hasOne(OptionDescription::class, 'option_id', 'option_id')
+            ->where('language_id', config('constants.lang'));
     }
 
 }

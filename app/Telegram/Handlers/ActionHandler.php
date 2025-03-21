@@ -81,12 +81,12 @@ class ActionHandler implements Handler
                             'callback_data' => "query=post&post=" . TelegramService::UKRPOST
                         ]
                     ],
-                    [
-                        [
-                            'text' => "Укрпошта (Казахстан)",
-                            'callback_data' => "query=post&post=" . TelegramService::UKRPOST_KZ
-                        ],
-                    ],
+//                    [
+//                        [
+//                            'text' => "Укрпошта (Казахстан)",
+//                            'callback_data' => "query=post&post=" . TelegramService::UKRPOST_KZ
+//                        ],
+//                    ],
                     [
                         [
                             'text' => "Назад",

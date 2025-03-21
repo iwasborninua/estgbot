@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/product-csv',[\App\Http\Controllers\ExportProductsController::class, 'csv']);
 
-Route::get('/test', function () {
+Route::get('/create-order', function () {
+//    Auth::loginUsingId(273381322);
+
+    Auth::user()->createOrder();
+
 });
 
 Route::post('/webhook', \App\Http\Controllers\TelegramController::class);

@@ -27,18 +27,27 @@ class ConfirmQuery extends BaseQuery
         $this->telegram::deleteMessage(['chat_id' => $this->chatId,
             'message_id' => $this->messageId,]);
         if ($confirm) {
-            \Auth::user()->createOrder();
-            $this->telegram::sendMessage([
-                'chat_id' => $this->chatId,
-                'text' => "Дякуємо! Ваш номер замовлення: (У розробцi)",
-                'reply_markup' => Keyboards::mainMenuKeyboard()
-            ]);
-            $this->telegram::sendMessage([
-                'chat_id' => $this->chatId,
-                'text' => "Ви можете продовжити покупки",
-                'reply_markup' => Keyboard::make(['inline_keyboard' =>
-                    [[['text' => "Продовжити покупки", 'callback_data' => "query=menu"]]]])
-            ]);
+            $orderId = \Auth::user()->createOrder();
+            if ($orderId !== 'ERROR') {
+                $this->telegram::sendMessage([
+                    'chat_id' => $this->chatId,
+                    'text' => "Дякуємо! Ваш номер замовлення: $orderId",
+                    'reply_markup' => Keyboards::mainMenuKeyboard()
+                ]);
+                $this->telegram::sendMessage([
+                    'chat_id' => $this->chatId,
+                    'text' => "Ви можете продовжити покупки",
+                    'reply_markup' => Keyboard::make(['inline_keyboard' =>
+                        [[['text' => "Продовжити покупки", 'callback_data' => "query=menu"]]]])
+                ]);
+            } else {
+                $this->telegram::sendMessage([
+                    'chat_id' => $this->chatId,
+                    'text' => "Сталася помилка. Спробуйте пізніше",
+                    'reply_markup' => Keyboards::mainMenuKeyboard()
+                ]);
+            }
+
         } else {
 
             $this->telegram::sendMessage([
