@@ -160,7 +160,6 @@ class User extends Authenticatable
         $order_data['payment_address_1'] = $delivery['postData'];
         $order_data['payment_city'] = $city[0];
         $order_data['payment_zone'] = $city[1];
-        $order_data['payment_postcode'] = $delivery['postData'];
         $order_data['payment_method'] = $delivery['payment'] == 'paid' ? 'оплата на особовий рахунок' : "Накладна плата";
         $order_data['payment_code'] = $delivery['payment'] == 'paid' ? 'pb_card' : "cod";
 
