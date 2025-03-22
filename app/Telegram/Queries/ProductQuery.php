@@ -61,7 +61,7 @@ class ProductQuery extends BaseQuery
             'callback_data' => "query=category&category=" . $this->params['category'] . "&page=" . $this->params['page']
         ]];
 
-        $href = url('image/' . $this->product->image);
+        $href = str_replace(' ', '%20',url('image/' . $this->product->image));
         $this->telegram::editMessageText([
             'chat_id' => $this->chatId,
             'message_id' => $this->messageId,
