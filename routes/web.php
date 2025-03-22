@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Category;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
 
 

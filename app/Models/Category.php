@@ -27,16 +27,17 @@ class Category extends Model
 
     public static function menuQuery()
     {
+        $ids = Setting::query()->where('key', Setting::CATEGORIES_KEY)->value('value');
         return Category::query()
             ->select(['category_id'])
             ->with('description', function ($q) {
-                $q->select('category_id', 'name')->where('language_id', 3);
+                $q->select('category_id', 'name')->where('language_id', 3)->orderBy('name');
             })
             ->withCount(['products' => function ($q) {
                 $q->where('quantity', '>', 0);
             }])
-            ->where('status', 1)
-            ->where('main_category', 1)
+            ->whereIn('category_id', unserialize($ids))
+            ->orderBy('sort_order')
             ->get();
     }
 

@@ -53,7 +53,7 @@ class CategoryQuery extends BaseQuery
 
         if ($products->currentPage() !== 1) {
             $nav[] = [
-                'text' => "Попередня сторінка",
+                'text' => "⬅️",
                 'callback_data' => 'query=category&category=' . $this->category->category_id . "&page=" . $products->currentPage() - 1
             ];
         }
@@ -65,7 +65,7 @@ class CategoryQuery extends BaseQuery
 
         if ($products->currentPage() != $products->lastPage()) {
             $nav[] = [
-                'text' => "Наступна сторінка",
+                'text' => "➡️",
                 'callback_data' => 'query=category&category=' . $this->category->category_id . "&page=" . $products->currentPage() + 1
             ];
         }
