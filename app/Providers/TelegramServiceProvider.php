@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Telegram\Commands\CartCommand;
+use App\Telegram\Commands\FallBackCommand;
+use App\Telegram\Commands\OrderCommand;
 use App\Telegram\Handlers\ActionHandler;
 use App\Telegram\Handlers\Handler;
 use App\Telegram\TelegramService;
@@ -22,17 +24,15 @@ class TelegramServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Log::info('Регистрация команд TelegramService...');
-
         Telegram::addCommands([
             StartCommand::class,
             FaqCommand::class,
             ContactsCommand::class,
             MenuCommand::class,
-            CartCommand::class
+            CartCommand::class,
+            OrderCommand::class,
+            FallBackCommand::class
         ]);
-
-        Log::info('Комманды зарегистрированны...');
     }
 
     public function register()

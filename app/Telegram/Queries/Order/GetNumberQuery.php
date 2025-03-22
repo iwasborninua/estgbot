@@ -30,17 +30,16 @@ class GetNumberQuery extends BaseQuery
 
         $message = $this->telegram::sendMessage([
             'chat_id' => $this->chatId,
-            'text' => "Майже готово! Поділіться з нами вашим номером телефону або напишіть його нижче",
+            'text' => "Майже готово! Поділіться з нами вашим номером телефону або напишіть його нижче у форматі 380xxxxxxxxx",
             'reply_markup' => Keyboard::make([
                 'keyboard' => [
                     [Keyboard::button(['text' => 'Поділитися номером', 'request_contact' => true,])],
                     [Keyboard::button(['text' => TelegramService::CANCEL])],
                 ],
-                'resize_keyboard' => true,
                 'one_time_keyboard' => true
             ]),
         ]);
-
+        \Log::info($message->messageId);
         TelegramService::setNextAction("total", [
                 'prev_message' => $message->messageId,
                 'callbackQuery' => $this->query,

@@ -32,7 +32,7 @@ class OrderQuery extends BaseQuery
         $message = $this->telegram::editMessageText([
             "chat_id" => $this->chatId,
             "message_id" => $this->messageId,
-            'text' => "Куди доставляти?" . PHP_EOL . "(Напишіть ваше місто та область)",
+            'text' => "Куди доставляти?" . PHP_EOL . "(Напишіть ваше місто та область через кому)",
         ]);
         TelegramService::setNextAction("orderCity", [
                 'prev_message' => $message->messageId,

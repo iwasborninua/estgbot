@@ -15,8 +15,6 @@ class StartCommand extends Command
 
     public function handle()
     {
-        Log::info("Команда /start вызвана");
-
         // Первое сообщение (форматировать не стоит...)
         $this->replyWithMessage([
             'text' => "Це офіційний магазин виробника сортового насіння конопель Errors Seeds

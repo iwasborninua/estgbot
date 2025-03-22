@@ -58,44 +58,61 @@ class ActionHandler implements Handler
     public function orderCity()
     {
         $message = $this->update->message;
-        $delivery['city'] = $message->text;
-        \Auth::user()->setDelivery($delivery);
+        if (count(explode(',', $message->text)) == 2) {
+            $delivery['city'] = $message->text;
+            \Auth::user()->setDelivery($delivery);
 
-        \Telegram::deleteMessage([
-            'chat_id' => $message->chat->id,
-            'message_id' => $this->params['prev_message']
-        ]);
+            \Telegram::deleteMessage([
+                'chat_id' => $message->chat->id,
+                'message_id' => $this->params['prev_message']
+            ]);
 
-        \Telegram::sendMessage([
-            "chat_id" => $message->chat->id,
-            'text' => 'Чим доставляти?',
-            'reply_markup' => Keyboard::make([
-                'inline_keyboard' => [
-                    [
+            \Telegram::sendMessage([
+                "chat_id" => $message->chat->id,
+                'text' => 'Чим доставляти?',
+                'reply_markup' => Keyboard::make([
+                    'inline_keyboard' => [
                         [
-                            'text' => "Нова Пошта",
-                            'callback_data' => "query=post&post=" . TelegramService::NOVAPOST
+                            [
+                                'text' => "Нова Пошта",
+                                'callback_data' => "query=post&post=" . TelegramService::NOVAPOST
+                            ],
+                            [
+                                'text' => "Укрпошта",
+                                'callback_data' => "query=post&post=" . TelegramService::UKRPOST
+                            ]
                         ],
-                        [
-                            'text' => "Укрпошта",
-                            'callback_data' => "query=post&post=" . TelegramService::UKRPOST
-                        ]
-                    ],
 //                    [
 //                        [
 //                            'text' => "Укрпошта (Казахстан)",
 //                            'callback_data' => "query=post&post=" . TelegramService::UKRPOST_KZ
 //                        ],
 //                    ],
-                    [
                         [
-                            'text' => "Назад",
-                            'callback_data' => "query=make-order"
-                        ],
+                            [
+                                'text' => "Назад",
+                                'callback_data' => "query=make-order"
+                            ],
+                        ]
                     ]
-                ]
-            ])
-        ]);
+                ])
+            ]);
+        } else {
+            \Telegram::deleteMessage(['chat_id' => $message->chat->id, 'message_id' => $message->messageId]);
+            try {
+                \Telegram::editMessageText([
+                    'chat_id' => $message->chat->id,
+                    'message_id' => $this->params['prev_message'],
+                    'text' => 'Напишіть ваше місто та область через кому. ' . PHP_EOL . '(приклад <b>Полтава, Полтавська область</b>)',
+                    'parse_mode' => 'HTML'
+                ]);
+                TelegramService::setNextAction('orderCity', $this->params);
+
+            } catch (\Exception $e) {
+                TelegramService::setNextAction('orderCity', $this->params);
+            }
+        }
+
     }
 
     public function postData()
@@ -125,35 +142,52 @@ class ActionHandler implements Handler
     public function fio()
     {
         $message = $this->update->message;
-        $delivery = \Auth::user()->getDelivery();
+        if (count(explode(' ', $message->text)) > 1) {
+            $delivery = \Auth::user()->getDelivery();
 
-        $delivery['fio'] = $message->text;
-        \Auth::user()->setDelivery($delivery);
+            $delivery['fio'] = $message->text;
+            \Auth::user()->setDelivery($delivery);
 
-        \Telegram::deleteMessage([
-            'chat_id' => $message->chat->id,
-            'message_id' => $this->params['prev_message']
-        ]);
+            \Telegram::deleteMessage([
+                'chat_id' => $message->chat->id,
+                'message_id' => $this->params['prev_message']
+            ]);
 
-        \Telegram::sendMessage([
-            "chat_id" => $message->chat->id,
-            'text' => "Замовлення до 400 грн відправляються за повною передоплатою: " . PHP_EOL . PHP_EOL .
-                "Сплатити замовлення можна за реквізитами:" . PHP_EOL . "Карта 4035200041448009 " . PHP_EOL .
-                "ФОП Горова Людмила" . PHP_EOL . PHP_EOL . "Після оплати надішліть скріншот чека нашому оператору:",
-            'reply_markup' => Keyboard::make(['inline_keyboard' =>
-                [
+            \Telegram::sendMessage([
+                "chat_id" => $message->chat->id,
+                'text' => "Замовлення до 400 грн відправляються за повною передоплатою: " . PHP_EOL . PHP_EOL .
+                    "Сплатити замовлення можна за реквізитами:" . PHP_EOL . "Карта 4035200041448009 " . PHP_EOL .
+                    "ФОП Горова Людмила" . PHP_EOL . PHP_EOL . "Після оплати надішліть скріншот чека нашому оператору:",
+                'reply_markup' => Keyboard::make(['inline_keyboard' =>
                     [
-                        ['text' => "Надіслати чек", 'url' => "http://t.me/ErrorsSeeds_Support_bot"],
-                        ['text' => "Хочу консультацію", 'url' => "http://t.me/ErrorsSeeds_Support_bot"],
-                    ],
-                    [
-                        ['text' => "Накладений платіж", 'callback_data' => "query=get-number&payment=" . TelegramService::OVERHEAD_PAYMENT],
-                        ['text' => "Я сплатив", 'callback_data' => "query=get-number&payment=" . TelegramService::PAID],
-                    ],
-                    [['text' => "Назад", 'callback_data' => "query=select-fio"]]
-                ]
-            ])
-        ]);
+                        [
+                            ['text' => "Надіслати чек", 'url' => "http://t.me/ErrorsSeeds_Support_bot"],
+                            ['text' => "Хочу консультацію", 'url' => "http://t.me/ErrorsSeeds_Support_bot"],
+                        ],
+                        [
+                            ['text' => "Накладений платіж", 'callback_data' => "query=get-number&payment=" . TelegramService::OVERHEAD_PAYMENT],
+                            ['text' => "Я сплатив", 'callback_data' => "query=get-number&payment=" . TelegramService::PAID],
+                        ],
+                        [['text' => "Назад", 'callback_data' => "query=select-fio"]]
+                    ]
+                ])
+            ]);
+        } else {
+            \Telegram::deleteMessage(['chat_id' => $message->chat->id, 'message_id' => $message->messageId]);
+            try {
+                \Telegram::editMessageText([
+                    'chat_id' => $message->chat->id,
+                    'message_id' => $this->params['prev_message'],
+                    'text' => 'Напишіть ім\'я та прізвище одержувача посилки ' . PHP_EOL . '<b>(минимум 2 слова через пробіл)</b>',
+                    'parse_mode' => 'HTML'
+                ]);
+                TelegramService::setNextAction('fio', $this->params);
+
+            } catch (\Exception $e) {
+                TelegramService::setNextAction('fio', $this->params);
+            }
+        }
+
     }
 
     public function total()
@@ -172,8 +206,20 @@ class ActionHandler implements Handler
         } else {
             $contact = $message->text;
         }
-        if (!$contact) {
-            \Telegram::deleteMessage(['chat_id' => $message->chat->id, 'message_id' => $message->messageId]);
+        if (!preg_match('/^380\d\d\d\d\d\d\d\d\d/', $contact)) {
+            try {
+                \Telegram::deleteMessage(['chat_id' => $message->chat->id, 'message_id' => $message->messageId]);
+                \Telegram::deleteMessage(['chat_id' => $message->chat->id, 'message_id' => $this->params['prev_message']]);
+                $m = \Telegram::sendMessage([
+                    'chat_id' => $message->chat->id,
+                    'text' => '<b>номером повинен бути у форматі 380xxxxxxxxx. Без дефісів та пробів</b>',
+                    'parse_mode' => 'HTML',
+                ]);
+                $this->params['prev_message'] = $m->messageId;
+                TelegramService::setNextAction('total', $this->params);
+            } catch (\Exception $e) {
+                TelegramService::setNextAction('total', $this->params);
+            }
         } else {
             $delivery = \Auth::user()->getDelivery();
             $delivery['phone'] = $contact;
@@ -194,6 +240,12 @@ class ActionHandler implements Handler
             $text .= "<b>Запит номера:</b> {$delivery['phone']}" . PHP_EOL;
 
             \Telegram::deleteMessage(['chat_id' => $message->chat->id, 'message_id' => $this->params['prev_message']]);
+            $m = \Telegram::sendMessage([
+                'chat_id' => $message->chat->id,
+                'text' => 'Кошик',
+                'reply_markup' => Keyboards::mainMenuKeyboard()
+            ]);
+            \Telegram::deleteMessage(['chat_id' => $message->chat->id, 'message_id' => $m->messageId]);
             \Telegram::sendMessage([
                 'chat_id' => $message->chat->id,
                 'text' => $text,

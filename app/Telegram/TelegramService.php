@@ -18,6 +18,7 @@ use App\Telegram\Queries\EmptyQuery;
 use App\Telegram\Queries\MenuQuery;
 use App\Telegram\Queries\Order\ConfirmQuery;
 use App\Telegram\Queries\Order\GetNumberQuery;
+use App\Telegram\Queries\Order\InfoQuery;
 use App\Telegram\Queries\Order\PostQuery;
 use App\Telegram\Queries\Order\RepeatNumberQuery;
 use App\Telegram\Queries\Order\SelectFIOQuery;
@@ -55,6 +56,7 @@ class TelegramService implements TelegramServiceInterface
         '📱 Контакти' => 'contacts',
         '❓ FAQ' => 'faq',
         '🛒 Корзина' => 'cart',
+        '📜 Замовлення' => 'order',
     ];
 
     private array $queries = [
@@ -75,6 +77,7 @@ class TelegramService implements TelegramServiceInterface
         'repeat-number' => RepeatNumberQuery::class,
         'total' => TotalQuery::class,
         'confirm-order' => ConfirmQuery::class,
+        'order-info' => InfoQuery::class,
     ];
 
     public function handleUpdate()
@@ -88,6 +91,9 @@ class TelegramService implements TelegramServiceInterface
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+            Log::info($method);
+            Log::info($this->update);
+            Telegram::triggerCommand('fallback', $this->update);
         }
 
     }

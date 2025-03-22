@@ -3,6 +3,7 @@
 namespace App\Telegram\Keyboards;
 
 use App\Models\ProductToCategory;
+use Carbon\Carbon;
 use Telegram\Bot\Keyboard\Keyboard;
 
 class Keyboards
@@ -63,5 +64,20 @@ class Keyboards
                 ],
             ]
         ];
+    }
+
+    public static function ordersKeyboard($orders)
+    {
+        $res = [];
+        foreach ($orders as $order) {
+            $date = Carbon::parse($order->date_added)->format('d/m/Y');
+            $res[] = [
+                [
+                    'text' => "$order->order_id від $date",
+                    'callback_data' => "query=order-info&order=$order->order_id"
+                ],
+            ];
+        }
+        return $res;
     }
 }
