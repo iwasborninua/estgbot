@@ -39,7 +39,7 @@ class GetNumberQuery extends BaseQuery
                 'one_time_keyboard' => true
             ]),
         ]);
-        \Log::info($message->messageId);
+
         TelegramService::setNextAction("total", [
                 'prev_message' => $message->messageId,
                 'callbackQuery' => $this->query,
