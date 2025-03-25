@@ -2,7 +2,6 @@
 
 namespace App\Telegram\Keyboards;
 
-use App\Models\ProductToCategory;
 use Carbon\Carbon;
 use Telegram\Bot\Keyboard\Keyboard;
 
@@ -40,7 +39,10 @@ class Keyboards
                 $i++;
             }
         }
-
+        $res[] = [[
+            'text' => "Виробники",
+            'callback_data' => "query=manufacturer-list"
+        ]];
         return $res;
     }
 

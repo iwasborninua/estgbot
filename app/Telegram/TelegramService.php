@@ -15,6 +15,8 @@ use App\Telegram\Queries\Cart\OrderQuery;
 use App\Telegram\Queries\Cart\UpdateCartQuery;
 use App\Telegram\Queries\CategoryQuery;
 use App\Telegram\Queries\EmptyQuery;
+use App\Telegram\Queries\Manufacturer\ManufacturerListQuery;
+use App\Telegram\Queries\Manufacturer\ManufacturerQuery;
 use App\Telegram\Queries\MenuQuery;
 use App\Telegram\Queries\Order\ConfirmQuery;
 use App\Telegram\Queries\Order\GetNumberQuery;
@@ -78,6 +80,8 @@ class TelegramService implements TelegramServiceInterface
         'total' => TotalQuery::class,
         'confirm-order' => ConfirmQuery::class,
         'order-info' => InfoQuery::class,
+        'manufacturer-list' => ManufacturerListQuery::class,
+        'manufacturer' => ManufacturerQuery::class,
     ];
 
     public function handleUpdate()
@@ -90,7 +94,7 @@ class TelegramService implements TelegramServiceInterface
                 Log::error("Unknown object Type[{$this->type}]. No Handle method");
             }
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error($e);
             Log::info($method);
             Log::info($this->update);
             Telegram::triggerCommand('fallback', $this->update);
