@@ -26,6 +26,11 @@ class Keyboards
         $i = 1;
         $count = count($data) - 1;
         $res = $rowData = [];
+        $res[] = [[
+            'text' => "Виробники",
+            'callback_data' => "query=manufacturer-list"
+        ]];
+
         foreach ($data as $k => $category) {
             $rowData[] = [
                 'text' => $category->description[0]?->name . " ({$category->products_count})",
@@ -39,10 +44,6 @@ class Keyboards
                 $i++;
             }
         }
-        $res[] = [[
-            'text' => "Виробники",
-            'callback_data' => "query=manufacturer-list"
-        ]];
         return $res;
     }
 
