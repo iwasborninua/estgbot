@@ -37,4 +37,22 @@ class Manufacturer extends Model
             ->paginate(10, ["*"], 'page', $page);
     }
 
+    public static function menuQueryCat(int $page, int $category_id)
+    {
+        return Manufacturer::query()
+            ->select(['manufacturer_id', 'name'])
+            ->whereHas('products', function ($q) {
+                $q->where('quantity', '>', 0);
+            })
+            ->whereHas('products.category', function ($q) use ($category_id) {
+                $q->where('oc_product_to_category.category_id', $category_id);
+            })
+            ->withCount(['products' => function ($q) use ($category_id) {
+                $q->whereHas('category', function ($q) use ($category_id) {
+                    $q->where('oc_product_to_category.category_id', $category_id);
+                })->where('quantity', '>', 0);
+            }])
+            ->orderBy('tg_sort_order')
+            ->paginate(10, ["*"], 'page', $page);
+    }
 }

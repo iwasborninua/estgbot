@@ -17,6 +17,7 @@ use App\Telegram\Queries\CategoryQuery;
 use App\Telegram\Queries\EmptyQuery;
 use App\Telegram\Queries\Manufacturer\ManufacturerListQuery;
 use App\Telegram\Queries\Manufacturer\ManufacturerQuery;
+use App\Telegram\Queries\Manufacturer\ManufacturerSubCategoryQuery;
 use App\Telegram\Queries\MenuQuery;
 use App\Telegram\Queries\Order\ConfirmQuery;
 use App\Telegram\Queries\Order\GetNumberQuery;
@@ -82,6 +83,7 @@ class TelegramService implements TelegramServiceInterface
         'order-info' => InfoQuery::class,
         'manufacturer-list' => ManufacturerListQuery::class,
         'manufacturer' => ManufacturerQuery::class,
+        'sub-manufacturer' => ManufacturerSubCategoryQuery::class,
     ];
 
     public function handleUpdate()

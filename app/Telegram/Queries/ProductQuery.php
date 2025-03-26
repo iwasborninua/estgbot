@@ -49,28 +49,36 @@ class ProductQuery extends BaseQuery
             foreach ($option->values->sortBy('description.name') as $value) {
                 $price = $this->product->price + $value->price;
                 $items[] = [[
-                    'text' => ($value->inCart() ? "(" . $value->inCartCount() . ") " : "") ."Придбати {$value->description->name} за $price",
+                    'text' => ($value->inCart() ? "(" . $value->inCartCount() . ") " : "") . "Придбати {$value->description->name} за $price",
                     'callback_data' => "query=atc" . "&page=" . $this->params['page'] .
                         '&pov=' . $value->product_option_value_id . "&product=" . $this->product->product_id
                 ]];
             }
         }
 
-        if(\Arr::has($this->params, 'category')){
+        if (\Arr::has($this->params, 'category') and \Arr::has($this->params, 'manufacturer')) {
             $items[] = [[
                 'text' => 'Назад',
-                'callback_data' => "query=category&category=" . $this->params['category'] . "&page=" . $this->params['page']
+                'callback_data' => "query=manufacturer&manufacturer=" . $this->params['manufacturer'] . "&page=" .
+                    $this->params['page'] . '&category=' . $this->params['category']
             ]];
-        }
-        if(\Arr::has($this->params, 'manufacturer')){
-            $items[] = [[
-                'text' => 'Назад',
-                'callback_data' => "query=manufacturer&manufacturer=" . $this->params['manufacturer'] . "&page=" . $this->params['page']
-            ]];
+        } else {
+            if (\Arr::has($this->params, 'category')) {
+                $items[] = [[
+                    'text' => 'Назад',
+                    'callback_data' => "query=category&category=" . $this->params['category'] . "&page=" . $this->params['page']
+                ]];
+            }
+            if (\Arr::has($this->params, 'manufacturer')) {
+                $items[] = [[
+                    'text' => 'Назад',
+                    'callback_data' => "query=manufacturer&manufacturer=" . $this->params['manufacturer'] . "&page=" . $this->params['page']
+                ]];
+            }
         }
 
 
-        $href = str_replace(' ', '%20',url('image/' . $this->product->image));
+        $href = str_replace(' ', '%20', url('image/' . $this->product->image));
         $this->telegram::editMessageText([
             'chat_id' => $this->chatId,
             'message_id' => $this->messageId,

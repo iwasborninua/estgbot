@@ -23,19 +23,27 @@ class Keyboards
 
     public static function categoryKeyboards($data, $rowCount = 2)
     {
-        $i = 1;
+        $i = 2;
         $count = count($data) - 1;
         $res = $rowData = [];
-        $res[] = [[
+        $rowData[] = [
             'text' => "Виробники",
             'callback_data' => "query=manufacturer-list"
-        ]];
+        ];
 
         foreach ($data as $k => $category) {
-            $rowData[] = [
-                'text' => $category->description[0]?->name . " ({$category->products_count})",
-                'callback_data' => "query=category&category={$category->category_id}"
-            ];
+            if (in_array($category->category_id, [73, 264, 240, 74])) {
+                $rowData[] = [
+                    'text' => $category->description[0]?->name . " ({$category->products_count})",
+                    'callback_data' => "query=sub-manufacturer&category={$category->category_id}"
+                ];
+            } else {
+                $rowData[] = [
+                    'text' => $category->description[0]?->name . " ({$category->products_count})",
+                    'callback_data' => "query=category&category={$category->category_id}"
+                ];
+            }
+
             if ($i === $rowCount or $k === $count) {
                 $res[] = $rowData;
                 $i = 1;

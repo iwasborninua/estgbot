@@ -37,7 +37,7 @@ class Category extends Model
                 $q->where('quantity', '>', 0);
             }])
             ->whereIn('category_id', unserialize($ids))
-            ->orderBy('sort_order')
+            ->orderBy('tg_sort_order')
             ->get();
     }
 
