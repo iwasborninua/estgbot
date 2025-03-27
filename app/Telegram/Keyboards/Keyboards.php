@@ -23,13 +23,9 @@ class Keyboards
 
     public static function categoryKeyboards($data, $rowCount = 2)
     {
-        $i = 2;
+        $i = 1;
         $count = count($data) - 1;
         $res = $rowData = [];
-        $rowData[] = [
-            'text' => "Виробники",
-            'callback_data' => "query=manufacturer-list"
-        ];
 
         foreach ($data as $k => $category) {
             if (in_array($category->category_id, [73, 264, 240, 74])) {
@@ -45,6 +41,12 @@ class Keyboards
             }
 
             if ($i === $rowCount or $k === $count) {
+                if ($k === $count) {
+                    $rowData[] = [
+                        'text' => "Виробники",
+                        'callback_data' => "query=manufacturer-list"
+                    ];
+                }
                 $res[] = $rowData;
                 $i = 1;
                 $rowData = [];
