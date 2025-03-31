@@ -108,7 +108,8 @@ class User extends Authenticatable
             }
         }
         $order_data['total'] = $orderTotal;
-
+        $order_data['totals'][] = ['code' => 'sub_total', 'title' => 'Підсумок', 'value' => $orderTotal, 'sort_order' => 0];
+        $order_data['totals'][] = ['code' => 'total', 'title' => 'Всього', 'value' => $orderTotal, 'sort_order' => 9];
 
         $name = explode(' ', $delivery['fio']);
         $city = explode(',', $delivery['city']);
