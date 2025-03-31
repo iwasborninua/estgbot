@@ -142,7 +142,7 @@ class TelegramService implements TelegramServiceInterface
             $data['chat_id'] = $chatId;
         }
         $user = User::query()->updateOrCreate(
-            ['username' => $data['username']],
+            ['username' => $data['username'] ?? $data['id']],
             $data
         );
         Auth::login($user);
