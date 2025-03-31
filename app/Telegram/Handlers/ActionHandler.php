@@ -153,9 +153,25 @@ class ActionHandler implements Handler
                 'message_id' => $this->params['prev_message']
             ]);
 
+            $paymentTypes = [];
+
+            if (\Auth::user()->getCartTotal() >= config('delivery.overhead_payment_min_amount')) {
+                $paymentTypes[] = ['text' => "Накладений платіж", 'callback_data' => "query=get-number&payment=" . TelegramService::OVERHEAD_PAYMENT];
+            }
+
+            $paymentTypes[] = ['text' => "Я сплатив", 'callback_data' => "query=get-number&payment=" . TelegramService::PAID];
+
             \Telegram::sendMessage([
                 "chat_id" => $message->chat->id,
-                'text' => "Замовлення до 400 грн відправляються за повною передоплатою: " . PHP_EOL . PHP_EOL .
+                'parse_mode' => 'html',
+                'text' => "<span style='color:#f34848'>Звернiть увагу!!! " . PHP_EOL . PHP_EOL . "
+            • Все обладнання та добрива відправляються на повну оплату новою поштою" . PHP_EOL . "
+              • Насіння, аксесуари, суперечки грибів - можна сплатити післяплатою (нова пошта), якщо сума замовлення від 400 до 2500 грн." . PHP_EOL . "
+            Умови доставки замовлень з товарами для вирощування можуть відрізнятися. Наші менеджери обов'язково зв'яжуться з вами і
+            повідомлять про кількість посилок і терміни їх доставки. </span>" . PHP_EOL . PHP_EOL .
+                    "<span style='color: red'>Доставка добрив здійснюється тільки після повної предоплати! </span>" . PHP_EOL . PHP_EOL .
+                    "<span style='color: #b52323'>Замовлення до 400 грн відправляються за повною передоплатою: </span>" . PHP_EOL . PHP_EOL .
+                    "<span style='color: #952626'>Доставка насіння за кордон здійснюється тільки в стелс-упаковці </span>" . PHP_EOL . PHP_EOL .
                     "Сплатити замовлення можна за реквізитами:" . PHP_EOL . "Карта 4035200041448009 " . PHP_EOL .
                     "ФОП Горова Людмила" . PHP_EOL . PHP_EOL . "Після оплати надішліть скріншот чека нашому оператору:",
                 'reply_markup' => Keyboard::make(['inline_keyboard' =>
@@ -164,10 +180,7 @@ class ActionHandler implements Handler
                             ['text' => "Надіслати чек", 'url' => "http://t.me/ErrorsSeeds_Support_bot"],
                             ['text' => "Хочу консультацію", 'url' => "http://t.me/ErrorsSeeds_Support_bot"],
                         ],
-                        [
-                            ['text' => "Накладений платіж", 'callback_data' => "query=get-number&payment=" . TelegramService::OVERHEAD_PAYMENT],
-                            ['text' => "Я сплатив", 'callback_data' => "query=get-number&payment=" . TelegramService::PAID],
-                        ],
+                        $paymentTypes,
                         [['text' => "Назад", 'callback_data' => "query=select-fio"]]
                     ]
                 ])

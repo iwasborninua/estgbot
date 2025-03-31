@@ -183,4 +183,31 @@ class User extends Authenticatable
         }
         return 'ERROR';
     }
+
+
+    public function getCartTotal()
+    {
+        $cart = $this->getCart();
+        $total = 0;
+
+        foreach ($cart as $productId => $options) {
+            $productQuery = Product::query()
+                ->with('description', function ($q) {
+                    $q->select(['product_id', 'name'])->where('language_id', config('constants.lang'));
+                })
+                ->where('product_id', $productId)->first();
+            $optionsQuery = ProductOptionValue::query()
+                ->with(['description', 'option', 'option.description'])
+                ->whereIn('product_option_value_id', array_keys($options))
+                ->get(['product_option_value_id', 'quantity', 'option_value_id', 'price', 'product_option_id', 'option_id']);
+
+            foreach ($optionsQuery as $data) {
+                $price = $productQuery->price + $data->price;
+                $quantity = $options[$data->product_option_value_id];
+                $total += ($quantity * $price);
+            }
+        }
+
+        return $total;
+    }
 }

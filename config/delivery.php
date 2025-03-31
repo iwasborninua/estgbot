@@ -19,5 +19,7 @@ return [
     'payment' => [
         \App\Telegram\TelegramService::OVERHEAD_PAYMENT => 'Накладений платіж',
         \App\Telegram\TelegramService::PAID => 'Я сплатив'
-    ]
+    ],
+
+    'overhead_payment_min_amount' => 400
 ];
