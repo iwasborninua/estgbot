@@ -45,11 +45,11 @@ return [
         ],
 
         'bot-ver-chat' => [
-            'token' => '7098087915:AAG0swFjSLncgt9lB7VcVey8fgsBnnmwIaU',
+            'token' => env('BOT_VER_CHAT_TOKEN'),
             'webhook_url' => 'https://api.errors-seeds.com.ua/verify-chat',
         ],
         'bot-ver-channel' => [
-            'token' => '8018436252:AAHJT1CSqIjbEwF71sBA8Tw3F0ujhTl-Fys',
+            'token' => env('BOT_VER_CHANNEL_TOKEN'),
             'webhook_url' => 'https://api.errors-seeds.com.ua/verify-channel',
 
         ],
