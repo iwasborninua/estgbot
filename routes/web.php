@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/product-csv',[\App\Http\Controllers\ExportProductsController::class, 'csv']);
+Route::get('/product-csv', [\App\Http\Controllers\ExportProductsController::class, 'csv']);
 
 Route::get('/create-order', function () {
 
@@ -24,5 +24,7 @@ Route::get('/create-order', function () {
 
 });
 
-Route::post('/webhook', \App\Http\Controllers\TelegramController::class);
+Route::post('/webhook', [\App\Http\Controllers\TelegramController::class, 'shop']);
+Route::post('/verify-chat', [\App\Http\Controllers\TelegramController::class, 'verifyChat']);
+Route::post('/verify-channel', [\App\Http\Controllers\TelegramController::class, 'verifyChannel']);
 
