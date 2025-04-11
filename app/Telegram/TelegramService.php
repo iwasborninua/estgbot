@@ -137,7 +137,7 @@ class TelegramService implements TelegramServiceInterface
     public function authUser()
     {
         $chatId = $this->update->getChat()->id;
-        $data = $this->update->getRelatedObject()->from->toArray();
+        $data = $this->update->{$this->update->objectType()}->from->toArray();
         if ($chatId) {
             $data['chat_id'] = $chatId;
         }
