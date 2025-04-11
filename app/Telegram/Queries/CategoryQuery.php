@@ -39,6 +39,7 @@ class CategoryQuery extends BaseQuery
                 $q->select(['product_id', 'name'])->where('language_id', config('constants.lang'));
             })
             ->where('quantity', '>', 0)
+            ->where('status', 1)
             ->paginate(10, ["*"], 'page', $page);
 
         $items = [];

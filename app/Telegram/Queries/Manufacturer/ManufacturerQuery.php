@@ -35,7 +35,7 @@ class ManufacturerQuery extends BaseQuery
             ->with('description', function ($q) {
                 $q->select(['product_id', 'name'])->where('language_id', config('constants.lang'));
             })
-            ->where('quantity', '>', 0);
+            ->where('quantity', '>', 0)->where('status', 1);
         if (\Arr::has($this->params, 'category')) {
             $products = $products->whereHas('category', function ($q) {
                 $q->where('oc_product_to_category.category_id', $this->params['category']);
