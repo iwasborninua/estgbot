@@ -16,26 +16,21 @@ class TelegramController extends Controller
     public function verifyChat()
     {
         $update = \Telegram::getWebhookUpdate();
-        $adminUsername = "ErrorsSeed_admin";
+        $adminUsername = "ErrorsSeeds_admin";
 
         $welcomeImagePath = storage_path('app/public/verified.jpg');
         if (isset($update['chat_join_request'])) {
             $chatJoinRequest = $update['chat_join_request'];
             $userId = $chatJoinRequest['from']['id'];
-            $caption = "***Вітаємо! Для підтвердження запиту у канал, будь ласка, напишіть 'хочу в чат' адміністратору: [@" . $adminUsername . "]***\n\n";
+            $caption = "***Вітаємо! Для підтвердження запиту у канал, будь ласка, напишіть 'хочу в чат' адміністратору: @" . $adminUsername . "***\n\n";
             $caption .= "Ми перевіряємо кожного вручну — це вимушений крок через атаки з боку ворожих ботів. Так ми захищаємо спільноту від фейкових акаунтів, витоку інформації та блокувань. Дякуємо за розуміння! 💛";
 
             try {
-                // Отправляем фото с подписью
-//                \Telegram::sendPhoto([
-//                    'chat_id' => $userId,
-//                    'photo' => new \CURLFile(realpath($welcomeImagePath)),
-//                    'caption' => $caption,
-//                    'parse_mode' => 'Markdown'
-//                ]);
-                $res = \Telegram::sendMessage([
+
+                $res = \Telegram::bot('bot-ver-chat')->sendPhoto([
                     'chat_id' => $userId,
-                    'text' => $caption,
+                    'photo' => $welcomeImagePath,
+                    'caption' => $caption,
                     'parse_mode' => 'Markdown'
                 ]);
                 \Log::info($res);
@@ -52,7 +47,7 @@ class TelegramController extends Controller
 
     public function verifyChannel()
     {
-        $adminUsername = "ErrorsSeed_admin";
+        $adminUsername = "ErrorsSeeds_admin";
 
         $welcomeImagePath = storage_path('app/public/verified.jpg');
         $update = \Telegram::getWebhookUpdate();
@@ -60,20 +55,14 @@ class TelegramController extends Controller
         if (isset($update['chat_join_request'])) {
             $chatJoinRequest = $update['chat_join_request'];
             $userId = $chatJoinRequest['from']['id'];
-            $caption = "***Вітаємо! Для підтвердження запиту у канал, будь ласка, напишіть '+' адміністратору: [@" . $adminUsername . "]***\n\n";
+            $caption = "***Вітаємо! Для підтвердження запиту у канал, будь ласка, напишіть '+' адміністратору: @" . $adminUsername . "***\n\n";
             $caption .= "Ми перевіряємо кожного вручну — це вимушений крок через атаки з боку ворожих ботів. Так ми захищаємо спільноту від фейкових акаунтів, витоку інформації та блокувань. Дякуємо за розуміння! 💛";
 
             try {
-                // Отправляем фото с подписью
-//                \Telegram::sendPhoto([
-//                    'chat_id' => $userId,
-//                    'photo' => new \CURLFile(realpath($welcomeImagePath)),
-//                    'caption' => $caption,
-//                    'parse_mode' => 'Markdown'
-//                ]);
-                $res = \Telegram::sendMessage([
+                $res = \Telegram::bot('bot-ver-channel')->sendPhoto([
                     'chat_id' => $userId,
-                    'text' => $caption,
+                    'photo' => $welcomeImagePath,
+                    'caption' => $caption,
                     'parse_mode' => 'Markdown'
                 ]);
                 \Log::info($res);
