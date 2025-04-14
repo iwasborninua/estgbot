@@ -56,9 +56,8 @@ class TelegramController extends Controller
 
         $welcomeImagePath = storage_path('app/public/verified.jpg');
         $update = \Telegram::getWebhookUpdate();
-
+        \Log::warning(print_r($update, 1));
         if (isset($update['chat_join_request'])) {
-            \Log::warning(print_r($update, 1));
             $chatJoinRequest = $update['chat_join_request'];
             $userId = $chatJoinRequest['from']['id'];
             $caption = "***Вітаємо! Для підтвердження запиту у канал, будь ласка, напишіть '+' адміністратору: [@" . $adminUsername . "]***\n\n";
