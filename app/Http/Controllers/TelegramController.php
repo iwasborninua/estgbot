@@ -15,9 +15,10 @@ class TelegramController extends Controller
 
     public function verifyChat()
     {
+
         $update = \Telegram::getWebhookUpdate();
         $adminUsername = "ErrorsSeed_admin";
-
+        \Log::info($update, ['---------verifyChat']);
 
         $welcomeImagePath = storage_path('app/public/verified.jpg');
         if (isset($update['chat_join_request'])) {
@@ -56,6 +57,7 @@ class TelegramController extends Controller
         $telegram = \Telegram::class;
         $update = $telegram->getWebhookUpdate();
 
+        \Log::info($update, ['---------verifyChannel']);
         if (isset($update['chat_join_request'])) {
             $chatJoinRequest = $update['chat_join_request'];
             $userId = $chatJoinRequest['from']['id'];
