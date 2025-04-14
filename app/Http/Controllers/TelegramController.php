@@ -18,13 +18,11 @@ class TelegramController extends Controller
 
         $update = \Telegram::getWebhookUpdate();
         $adminUsername = "ErrorsSeed_admin";
-        \Log::info($update, ['---------verifyChat']);
 
         $welcomeImagePath = storage_path('app/public/verified.jpg');
         if (isset($update['chat_join_request'])) {
             $chatJoinRequest = $update['chat_join_request'];
             $userId = $chatJoinRequest['from']['id'];
-            \Log::info($userId, ['-----userId']);
             $caption = "***Вітаємо! Для підтвердження запиту у канал, будь ласка, напишіть 'хочу в чат' адміністратору: [@" . $adminUsername . "]***\n\n";
             $caption .= "Ми перевіряємо кожного вручну — це вимушений крок через атаки з боку ворожих ботів. Так ми захищаємо спільноту від фейкових акаунтів, витоку інформації та блокувань. Дякуємо за розуміння! 💛";
 
