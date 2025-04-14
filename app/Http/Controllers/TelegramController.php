@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Telegram\TelegramServiceInterface;
-use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramController extends Controller
 {
@@ -17,7 +16,7 @@ class TelegramController extends Controller
     public function verifyChat()
     {
 
-        $update = Telegram::getWebhookUpdate();
+        $update = \Telegram::getWebhookUpdate();
         $adminUsername = "ErrorsSeed_admin";
         \Log::info($update, ['---------verifyChat']);
 
@@ -55,8 +54,7 @@ class TelegramController extends Controller
 
 // Путь к изображению
         $welcomeImagePath = storage_path('app/public/verified.jpg');
-        $telegram = \Telegram::class;
-        $update = Telegram::getWebhookUpdate();
+        $update = \Telegram::getWebhookUpdate();
 
         \Log::info($update, ['---------verifyChannel']);
         if (isset($update['chat_join_request'])) {
@@ -68,7 +66,7 @@ class TelegramController extends Controller
 
             try {
                 // Отправляем фото с подписью
-                $telegram->sendPhoto([
+                \Telegram::sendPhoto([
                     'chat_id' => $userId,
                     'photo' => new \CURLFile(realpath($welcomeImagePath)),
                     'caption' => $caption,
@@ -76,7 +74,7 @@ class TelegramController extends Controller
                 ]);
             } catch (\Exception $e) {
                 // Если отправка фото не удалась, отправляем только текст
-                $telegram->sendMessage([
+                \Telegram::sendMessage([
                     'chat_id' => $userId,
                     'text' => $caption,
                     'parse_mode' => 'Markdown'
