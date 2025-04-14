@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Telegram\TelegramServiceInterface;
+use Telegram\Bot\FileUpload\InputFile;
 
 class TelegramController extends Controller
 {
@@ -29,7 +30,7 @@ class TelegramController extends Controller
 
                 $res = \Telegram::bot('bot-ver-chat')->sendPhoto([
                     'chat_id' => $userId,
-                    'photo' => $welcomeImagePath,
+                    'photo' => InputFile::create($welcomeImagePath),
                     'caption' => $caption,
                     'parse_mode' => 'Markdown'
                 ]);
@@ -61,7 +62,7 @@ class TelegramController extends Controller
             try {
                 $res = \Telegram::bot('bot-ver-channel')->sendPhoto([
                     'chat_id' => $userId,
-                    'photo' => $welcomeImagePath,
+                    'photo' => InputFile::create($welcomeImagePath),
                     'caption' => $caption,
                     'parse_mode' => 'Markdown'
                 ]);
