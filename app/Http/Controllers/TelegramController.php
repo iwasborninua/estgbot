@@ -20,7 +20,6 @@ class TelegramController extends Controller
 
         $welcomeImagePath = storage_path('app/public/verified.jpg');
         if (isset($update['chat_join_request'])) {
-            \Log::warning(print_r($update, 1));
             $chatJoinRequest = $update['chat_join_request'];
             $userId = $chatJoinRequest['from']['id'];
             $caption = "***Вітаємо! Для підтвердження запиту у канал, будь ласка, напишіть 'хочу в чат' адміністратору: [@" . $adminUsername . "]***\n\n";
@@ -34,13 +33,14 @@ class TelegramController extends Controller
 //                    'caption' => $caption,
 //                    'parse_mode' => 'Markdown'
 //                ]);
-                \Telegram::sendMessage([
+                $res = \Telegram::sendMessage([
                     'chat_id' => $userId,
                     'text' => $caption,
                     'parse_mode' => 'Markdown'
                 ]);
+                \Log::info($res);
             } catch (\Exception $e) {
-                \Log::info([$e->getMessage(), $e->getCode()], ['exception']);
+                \Log::error([$e->getMessage(), $e->getCode()], ['exception']);
                 return response('');
                 // Если отправка фото не удалась, отправляем только текст
 
@@ -56,7 +56,7 @@ class TelegramController extends Controller
 
         $welcomeImagePath = storage_path('app/public/verified.jpg');
         $update = \Telegram::getWebhookUpdate();
-        \Log::warning(print_r($update, 1));
+
         if (isset($update['chat_join_request'])) {
             $chatJoinRequest = $update['chat_join_request'];
             $userId = $chatJoinRequest['from']['id'];
@@ -71,14 +71,14 @@ class TelegramController extends Controller
 //                    'caption' => $caption,
 //                    'parse_mode' => 'Markdown'
 //                ]);
-                \Telegram::sendMessage([
+                $res = \Telegram::sendMessage([
                     'chat_id' => $userId,
                     'text' => $caption,
                     'parse_mode' => 'Markdown'
                 ]);
+                \Log::info($res);
             } catch (\Exception $e) {
-                \Log::info([$e->getMessage(), $e->getCode()], ['exception']);
-                return response('');
+                \Log::error([$e->getMessage(), $e->getCode()], ['exception']);
             }
         }
         return response('');
