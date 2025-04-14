@@ -15,12 +15,12 @@ class TelegramController extends Controller
 
     public function verifyChat()
     {
-
         $update = \Telegram::getWebhookUpdate();
         $adminUsername = "ErrorsSeed_admin";
 
         $welcomeImagePath = storage_path('app/public/verified.jpg');
         if (isset($update['chat_join_request'])) {
+            \Log::warning(print_r($update, 1));
             $chatJoinRequest = $update['chat_join_request'];
             $userId = $chatJoinRequest['from']['id'];
             $caption = "***Вітаємо! Для підтвердження запиту у канал, будь ласка, напишіть 'хочу в чат' адміністратору: [@" . $adminUsername . "]***\n\n";
@@ -28,20 +28,21 @@ class TelegramController extends Controller
 
             try {
                 // Отправляем фото с подписью
-                \Telegram::sendPhoto([
-                    'chat_id' => $userId,
-                    'photo' => new \CURLFile(realpath($welcomeImagePath)),
-                    'caption' => $caption,
-                    'parse_mode' => 'Markdown'
-                ]);
-            } catch (\Exception $e) {
-                \Log::info($e, ['exception']);
-                // Если отправка фото не удалась, отправляем только текст
+//                \Telegram::sendPhoto([
+//                    'chat_id' => $userId,
+//                    'photo' => new \CURLFile(realpath($welcomeImagePath)),
+//                    'caption' => $caption,
+//                    'parse_mode' => 'Markdown'
+//                ]);
                 \Telegram::sendMessage([
                     'chat_id' => $userId,
                     'text' => $caption,
                     'parse_mode' => 'Markdown'
                 ]);
+            } catch (\Exception $e) {
+                \Log::info($e, ['exception']);
+                // Если отправка фото не удалась, отправляем только текст
+
             }
         }
 
@@ -57,6 +58,7 @@ class TelegramController extends Controller
         $update = \Telegram::getWebhookUpdate();
 
         if (isset($update['chat_join_request'])) {
+            \Log::warning(print_r($update, 1));
             $chatJoinRequest = $update['chat_join_request'];
             $userId = $chatJoinRequest['from']['id'];
             $caption = "***Вітаємо! Для підтвердження запиту у канал, будь ласка, напишіть '+' адміністратору: [@" . $adminUsername . "]***\n\n";
@@ -64,21 +66,21 @@ class TelegramController extends Controller
 
             try {
                 // Отправляем фото с подписью
-                \Telegram::sendPhoto([
-                    'chat_id' => $userId,
-                    'photo' => new \CURLFile(realpath($welcomeImagePath)),
-                    'caption' => $caption,
-                    'parse_mode' => 'Markdown'
-                ]);
-            } catch (\Exception $e) {
-                \Log::info($e, ['exception']);
-                // Если отправка фото не удалась, отправляем только текст
+//                \Telegram::sendPhoto([
+//                    'chat_id' => $userId,
+//                    'photo' => new \CURLFile(realpath($welcomeImagePath)),
+//                    'caption' => $caption,
+//                    'parse_mode' => 'Markdown'
+//                ]);
                 \Telegram::sendMessage([
                     'chat_id' => $userId,
                     'text' => $caption,
                     'parse_mode' => 'Markdown'
                 ]);
+            } catch (\Exception $e) {
+                \Log::info($e, ['exception']);
             }
         }
+        return response('');
     }
 }
