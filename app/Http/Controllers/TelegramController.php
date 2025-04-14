@@ -40,7 +40,8 @@ class TelegramController extends Controller
                     'parse_mode' => 'Markdown'
                 ]);
             } catch (\Exception $e) {
-                \Log::info($e, ['exception']);
+                \Log::info([$e->getMessage(), $e->getCode()], ['exception']);
+                return response('');
                 // Если отправка фото не удалась, отправляем только текст
 
             }
@@ -53,7 +54,6 @@ class TelegramController extends Controller
     {
         $adminUsername = "ErrorsSeed_admin";
 
-// Путь к изображению
         $welcomeImagePath = storage_path('app/public/verified.jpg');
         $update = \Telegram::getWebhookUpdate();
 
@@ -78,7 +78,8 @@ class TelegramController extends Controller
                     'parse_mode' => 'Markdown'
                 ]);
             } catch (\Exception $e) {
-                \Log::info($e, ['exception']);
+                \Log::info([$e->getMessage(), $e->getCode()], ['exception']);
+                return response('');
             }
         }
         return response('');
