@@ -15,7 +15,6 @@ use App\Telegram\Commands\StartCommand;
 use App\Telegram\Commands\FaqCommand;
 use App\Telegram\Commands\ContactsCommand;
 use App\Telegram\Commands\MenuCommand;
-use Illuminate\Support\Facades\Log;
 
 class TelegramServiceProvider extends ServiceProvider
 {
