@@ -33,10 +33,10 @@ bit.ly/ErrorsSeedsShop
             'text' => "Підписуйтесь на наші соціальні мережі, щоб завжди бути в курсі актуальних новин та пропозицій:",
             'reply_markup' => Keyboard::make([
                 'inline_keyboard' => [
-                    [['text' => '📢 TelegramService-канал', 'url' => 'https://t.me/Michael_McNamara']],
-                    [['text' => '📸 Instagram', 'url' => 'https://t.me/Michael_McNamara']],
-                    [['text' => '📘 Facebook', 'url' => 'https://t.me/Michael_McNamara']],
-                    [['text' => '🌱 ES Grower Club', 'url' => 'https://t.me/Michael_McNamara']],
+                    [['text' => '� TelegramService-канал', 'url' => '']],
+                    [['text' => '� Instagram', 'url' => '']],
+                    [['text' => '� Facebook', 'url' => '']],
+                    [['text' => '� ES Grower Club', 'url' => '']],
                 ]
             ])
         ]);
