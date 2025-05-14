@@ -28,6 +28,7 @@ bit.ly/ErrorsSeedsShop
             'reply_markup' => Keyboards::mainMenuKeyboard() // Используем клавиатуру из Keyboards.php
         ]);
 
+
         // Второе сообщение
         $this->replyWithMessage([
             'text' => "Підписуйтесь на наші соціальні мережі, щоб завжди бути в курсі актуальних новин та пропозицій:",
