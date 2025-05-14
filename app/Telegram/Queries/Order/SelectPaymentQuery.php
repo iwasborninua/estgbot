@@ -42,8 +42,8 @@ class SelectPaymentQuery extends BaseQuery
             'reply_markup' => Keyboard::make(['inline_keyboard' =>
                 [
                     [
-                        ['text' => "Надіслати чек", 'url' => "http://t.me/ErrorsSeeds_Support_bot"],
-                        ['text' => "Хочу консультацію", 'url' => "http://t.me/ErrorsSeeds_Support_bot"],
+                        ['text' => "Надіслати чек", 'url' => "https://t.me/ESUA_Support_bot"],
+                        ['text' => "Хочу консультацію", 'url' => "https://t.me/ESUA_Support_bot"],
                     ],
                     $paymentTypes,
                     [['text' => "Назад", 'callback_data' => "query=select-fio"]]
