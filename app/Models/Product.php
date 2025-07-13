@@ -64,4 +64,17 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class, 'oc_product_to_category', 'product_id', 'category_id', 'product_id', 'category_id');
     }
+
+    public function special()
+    {
+        return $this->hasOne(ProductSpecial::class, 'product_id', 'product_id')
+            ->where('priority', 1)
+            ->where('customer_group_id', 1)
+            ->whereRaw('current_date() between date_start and date_end');
+    }
+
+    public function price()
+    {
+        return $this->special ? $this->special->price : $this->price;
+    }
 }

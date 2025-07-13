@@ -42,7 +42,8 @@ class InfoQuery extends BaseQuery
 
             $text .= "<b>$name</b>" . PHP_EOL;
 
-            $text .= $product->orderOption->value . ": " . $product->quantity . "шт. x " . $product->price . "₴ = " . $product->total . "₴" . PHP_EOL;
+            $text .= $product->orderOption->value . ": " . $product->quantity . "шт. x " . $product->price . "₴ = " . $product->total . "₴" .
+                PHP_EOL;
             $text .= PHP_EOL;
         }
         $text .= "-----" . PHP_EOL . "<b>Загалом:</b> {$orderData->total}₴" . PHP_EOL . PHP_EOL;

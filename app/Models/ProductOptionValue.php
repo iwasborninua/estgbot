@@ -42,4 +42,14 @@ class ProductOptionValue extends Model
             return 0;
         }
     }
+
+    public function special()
+    {
+        return $this->hasMany(ProductOptionSpecial::class, 'product_option_value_id', 'product_option_value_id');
+    }
+
+    public function price()
+    {
+        return isset($this->special[0]) ? $this->special[0]->price : $this->price;
+    }
 }

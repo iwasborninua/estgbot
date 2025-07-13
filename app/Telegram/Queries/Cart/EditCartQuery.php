@@ -38,11 +38,14 @@ class EditCartQuery extends BaseQuery
         $countCart = count($cart);
 
         $data = Product::productDataForEdit($productId, $optionsValues);
+        $options = $data->options()->with('values.special', function ($q) use ($data){
+            $q->where('special_id', $data->special?->product_special_id);
+        })->get();
         $caption = "<b>{$data->description[0]->name}</b>" . PHP_EOL . PHP_EOL;
         $items = [];
-        foreach ($data->options as $option) {
+        foreach ($options as $option) {
             foreach ($option->values as $value) {
-                $price = $data->price + $value->price;
+                $price = $data->price() + $value->price();
                 $count = $cart[$data->product_id][$value->product_option_value_id];
                 $sum = $count * $price;
                 $caption .= $value->description->name . ": " . $count . "шт. x " . $price . "₴ = " . $sum . "₴" . PHP_EOL;

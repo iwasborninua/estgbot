@@ -39,6 +39,9 @@ class ProductQuery extends BaseQuery
                 $q->select(['product_option_id', 'quantity', 'price', 'option_value_id', 'product_option_value_id', 'product_id']);
             })
             ->with('values.description')
+            ->with('values.special', function ($q){
+                $q->where('special_id', $this->product->special?->product_special_id);
+            })
             ->get(['product_id', 'product_option_id']);
 
         foreach ($attributes as $attribute) {
@@ -47,7 +50,7 @@ class ProductQuery extends BaseQuery
 
         foreach ($options as $option) {
             foreach ($option->values->sortBy('description.name') as $value) {
-                $price = $this->product->price + $value->price;
+                $price = $this->product->price() + $value->price();
                 $items[] = [[
                     'text' => ($value->inCart() ? "(" . $value->inCartCount() . ") " : "") . "Придбати {$value->description->name} за $price",
                     'callback_data' => "query=atc" . "&page=" . $this->params['page'] .

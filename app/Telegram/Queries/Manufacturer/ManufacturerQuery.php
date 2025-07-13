@@ -56,7 +56,7 @@ class ManufacturerQuery extends BaseQuery
         foreach ($products as $product) {
             $items[] = [[
                 'text' => ($product->inCart() ? "(" . $product->inCartCount() . ") " : "") .
-                    $product->description[0]->name . ' вiд ' . round($product->price) . '₴',
+                    $product->description[0]->name . ' вiд ' . round($product->price()) . '₴',
                 'callback_data' => 'query=product&product=' . $product->product_id . "&manufacturer=" . $this->manufacturer->manufacturer_id .
                     "&page=$page" . $andCategory
             ]];

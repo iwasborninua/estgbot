@@ -158,7 +158,8 @@ class TelegramService implements TelegramServiceInterface
         $total = 0;
         $text = "<b>Кошик</b>" . PHP_EOL . PHP_EOL . "-----" . PHP_EOL;
         foreach ($cart as $productId => $options) {
-            $productPrice = Product::query()->where('product_id', $productId)->value('price');
+            $product = Product::query()->where('product_id', $productId)->first();
+            $productPrice = $product->price();
             $name = ProductDescription::query()
                 ->where('product_id', $productId)
                 ->where('language_id', config('constants.lang'))
@@ -170,11 +171,14 @@ class TelegramService implements TelegramServiceInterface
                 ->with('description', function ($q) {
                     $q->select(['name', 'option_value_id']);
                 })
+                ->with('special', function ($q) use ($product){
+                    $q->where('special_id', $product->special?->product_special_id);
+                })
                 ->whereIn('product_option_value_id', array_keys($options))
                 ->get(['product_option_value_id', 'quantity', 'option_value_id', 'price']);
 
             foreach ($optionsData as $data) {
-                $price = $productPrice + $data->price;
+                $price = $productPrice + $data->price();
                 $count = $options[$data->product_option_value_id];
                 $sum = $count * $price;
                 $total += $sum;

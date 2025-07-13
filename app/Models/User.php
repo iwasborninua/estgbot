@@ -73,13 +73,16 @@ class User extends Authenticatable
                 })
                 ->where('product_id', $productId)->first();
             $optionsQuery = ProductOptionValue::query()
+                ->with('special', function ($q) use ($productQuery){
+                    $q->where('special_id', $productQuery->special?->product_special_id);
+                })
                 ->with(['description', 'option', 'option.description'])
                 ->whereIn('product_option_value_id', array_keys($options))
                 ->get(['product_option_value_id', 'quantity', 'option_value_id', 'price', 'product_option_id', 'option_id']);
 
             foreach ($optionsQuery as $data) {
                 $option_data = [];
-                $price = $productQuery->price + $data->price;
+                $price = $productQuery->price() + $data->price();
                 $quantity = $options[$data->product_option_value_id];
                 $total = $quantity * $price;
                 $orderTotal += $total;
@@ -197,12 +200,15 @@ class User extends Authenticatable
                 })
                 ->where('product_id', $productId)->first();
             $optionsQuery = ProductOptionValue::query()
+                ->with('special', function ($q) use ($productQuery){
+                    $q->where('special_id', $productQuery->special?->product_special_id);
+                })
                 ->with(['description', 'option', 'option.description'])
                 ->whereIn('product_option_value_id', array_keys($options))
                 ->get(['product_option_value_id', 'quantity', 'option_value_id', 'price', 'product_option_id', 'option_id']);
 
             foreach ($optionsQuery as $data) {
-                $price = $productQuery->price + $data->price;
+                $price = $productQuery->price() + $data->price();
                 $quantity = $options[$data->product_option_value_id];
                 $total += ($quantity * $price);
             }
