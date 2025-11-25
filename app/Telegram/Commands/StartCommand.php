@@ -3,6 +3,7 @@
 namespace App\Telegram\Commands;
 
 use App\Telegram\Keyboards\Keyboards;
+use App\Telegram\TelegramService;
 use Telegram\Bot\Commands\Command;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Illuminate\Support\Facades\Log;
@@ -34,10 +35,12 @@ bit.ly/ErrorsSeedsShop
             'text' => "Підписуйтесь на наші соціальні мережі, щоб завжди бути в курсі актуальних новин та пропозицій:",
             'reply_markup' => Keyboard::make([
                 'inline_keyboard' => [
-                    [['text' => '� TelegramService-канал', 'url' => '']],
-                    [['text' => '� Instagram', 'url' => '']],
-                    [['text' => '� Facebook', 'url' => '']],
-                    [['text' => '� ES Grower Club', 'url' => '']],
+                    [
+                        ['text' => '� Telegram-канал', 'url' => 'https://t.me/+S1AzQAUTIHg1OTQy'],
+                        ['text' => '� Instagram', 'url' => 'https://www.instagram.com/errorsseeds_ua'],
+                        ['text' => '� Facebook', 'url' => 'https://www.facebook.com/esuacom'],
+                        ['text' => '� ES Grower Club', 'url' => 'https://t.me/+RVZ1Dx51l3xmMzli']
+                    ],
                 ]
             ])
         ]);
