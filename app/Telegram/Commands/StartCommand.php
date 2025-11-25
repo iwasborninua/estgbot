@@ -36,10 +36,10 @@ bit.ly/ErrorsSeedsShop
             'reply_markup' => Keyboard::make([
                 'inline_keyboard' => [
                     [
-                        ['text' => '� Telegram-канал', 'url' => 'https://t.me/+S1AzQAUTIHg1OTQy'],
-                        ['text' => '� Instagram', 'url' => 'https://www.instagram.com/errorsseeds_ua'],
-                        ['text' => '� Facebook', 'url' => 'https://www.facebook.com/esuacom'],
-                        ['text' => '� ES Grower Club', 'url' => 'https://t.me/+RVZ1Dx51l3xmMzli']
+                        ['text' => ' Telegram-канал', 'url' => 'https://t.me/+S1AzQAUTIHg1OTQy'],
+                        ['text' => 'Instagram', 'url' => 'https://www.instagram.com/errorsseeds_ua'],
+                        ['text' => 'Facebook', 'url' => 'https://www.facebook.com/esuacom'],
+                        ['text' => 'ES Grower Club', 'url' => 'https://t.me/+RVZ1Dx51l3xmMzli']
                     ],
                 ]
             ])
