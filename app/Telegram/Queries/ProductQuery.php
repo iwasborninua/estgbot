@@ -13,6 +13,7 @@ use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Objects\CallbackQuery;
 use Telegram\Bot\Objects\InputMedia\InputMedia;
 use Telegram\Bot\Objects\InputMedia\InputMediaPhoto;
+use function Laravel\Prompts\warning;
 
 class ProductQuery extends BaseQuery
 {
@@ -50,7 +51,7 @@ class ProductQuery extends BaseQuery
 
         foreach ($options as $option) {
             foreach ($option->values->sortBy('description.name') as $value) {
-                $price = $this->product->price() + $value->price();
+                $price = $this->product->price($value->description->name) + $value->price();
                 $items[] = [[
                     'text' => ($value->inCart() ? "(" . $value->inCartCount() . ") " : "") . "Придбати {$value->description->name} за $price",
                     'callback_data' => "query=atc" . "&page=" . $this->params['page'] .

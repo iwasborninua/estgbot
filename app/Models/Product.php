@@ -73,8 +73,11 @@ class Product extends Model
             ->whereRaw('now() between date_start and date_end');
     }
 
-    public function price()
+    public function price($quantity = null)
     {
+        if ($quantity and in_array($quantity, [50, 100])) {
+            return $this->price;
+        }
         return $this->special ? $this->special->price : $this->price;
     }
 }
