@@ -43,35 +43,41 @@ class EditCartQuery extends BaseQuery
         })->get();
         $caption = "<b>{$data->description[0]->name}</b>" . PHP_EOL . PHP_EOL;
         $items = [];
-        foreach ($options as $option) {
-            foreach ($option->values as $value) {
-                $price = $data->price() + $value->price();
-                $count = $cart[$data->product_id][$value->product_option_value_id];
-                $sum = $count * $price;
-                $caption .= $value->description->name . ": " . $count . "шт. x " . $price . "₴ = " . $sum . "₴" . PHP_EOL;
+        \Log::info(print_r($cart, 1));
 
-                if (Arr::has($this->params, 'pov') and $this->params['pov'] == $value->product_option_value_id) {
-                    $item = [
-                        [
-                            'text' => "-1",
-                            'callback_data' => "query=update-cart&product=$productId&pov={$value->product_option_value_id}&method=minus&page=$page"
-                        ],
-                        [
+        foreach ($options as $option) {
+            \Log::info(print_r($option->toArray(), 1));
+
+            foreach ($option->values as $value) {
+                if (isset($cart[$data->product_id][$value->product_option_value_id])) {
+                    $price = $data->price() + $value->price();
+                    $count = $cart[$data->product_id][$value->product_option_value_id];
+                    $sum = $count * $price;
+                    $caption .= $value->description->name . ": " . $count . "шт. x " . $price . "₴ = " . $sum . "₴" . PHP_EOL;
+
+                    if (Arr::has($this->params, 'pov') and $this->params['pov'] == $value->product_option_value_id) {
+                        $item = [
+                            [
+                                'text' => "-1",
+                                'callback_data' => "query=update-cart&product=$productId&pov={$value->product_option_value_id}&method=minus&page=$page"
+                            ],
+                            [
+                                'text' => "✏️ $count шт. | {$price}₴ {$value->description->name}",
+                                'callback_data' => "query=update-cart&product=$productId&pov={$value->product_option_value_id}&method=insert&page=$page"
+                            ],
+                            [
+                                'text' => "+1",
+                                'callback_data' => "query=update-cart&product=$productId&pov={$value->product_option_value_id}&method=plus&page=$page"
+                            ],
+                        ];
+                    } else {
+                        $item = [[
                             'text' => "✏️ $count шт. | {$price}₴ {$value->description->name}",
-                            'callback_data' => "query=update-cart&product=$productId&pov={$value->product_option_value_id}&method=insert&page=$page"
-                        ],
-                        [
-                            'text' => "+1",
-                            'callback_data' => "query=update-cart&product=$productId&pov={$value->product_option_value_id}&method=plus&page=$page"
-                        ],
-                    ];
-                } else {
-                    $item = [[
-                        'text' => "✏️ $count шт. | {$price}₴ {$value->description->name}",
-                        'callback_data' => "query=edit-cart&pov={$value->product_option_value_id}&page=$page&next-edit=1"
-                    ]];
+                            'callback_data' => "query=edit-cart&pov={$value->product_option_value_id}&page=$page&next-edit=1"
+                        ]];
+                    }
+                    $items[] = $item;
                 }
-                $items[] = $item;
             }
         }
         if ($countCart !== 1) {

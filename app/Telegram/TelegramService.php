@@ -94,6 +94,7 @@ class TelegramService implements TelegramServiceInterface
                 return $this->{$method}($this->update);
             } else {
                 Log::error("Unknown object Type[{$this->type}]. No Handle method");
+                Telegram::triggerCommand('fallback', $this->update);
             }
         } catch (\Exception $e) {
             Log::error($e);
