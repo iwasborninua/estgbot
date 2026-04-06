@@ -43,11 +43,7 @@ class EditCartQuery extends BaseQuery
         })->get();
         $caption = "<b>{$data->description[0]->name}</b>" . PHP_EOL . PHP_EOL;
         $items = [];
-        \Log::info(print_r($cart, 1));
-
         foreach ($options as $option) {
-            \Log::info(print_r($option->toArray(), 1));
-
             foreach ($option->values as $value) {
                 if (isset($cart[$data->product_id][$value->product_option_value_id])) {
                     $price = $data->price() + $value->price();
