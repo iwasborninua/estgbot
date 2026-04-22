@@ -126,7 +126,8 @@ class TelegramService implements TelegramServiceInterface
             $class = $this->queryClassCreator($this->queries[$params['query']], $query, $params);
             return $class->handle();
         } else {
-            Log::warning('Unknown query key or key is not exist');
+            Log::warning('Unknown query key or key is not exist' );
+            Log::warning(implode($params));
         }
     }
 

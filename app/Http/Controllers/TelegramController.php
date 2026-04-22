@@ -34,7 +34,6 @@ class TelegramController extends Controller
                     'caption' => $caption,
                     'parse_mode' => 'Markdown'
                 ]);
-                \Log::info($res);
             } catch (\Exception $e) {
                 \Log::error([$e->getMessage(), $e->getCode()], ['exception']);
                 return response('');
@@ -66,7 +65,6 @@ class TelegramController extends Controller
                     'caption' => $caption,
                     'parse_mode' => 'Markdown'
                 ]);
-                \Log::info($res);
             } catch (\Exception $e) {
                 \Log::error([$e->getMessage(), $e->getCode()], ['exception']);
             }
