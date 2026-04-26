@@ -17,7 +17,7 @@ use Telegram\Bot\Keyboard\Keyboard;
 class CartCommand extends Command
 {
     protected string $name = 'cart';
-    protected string $description = 'Корзина';
+    protected string $description = 'Кошик';
 
     public function handle()
     {

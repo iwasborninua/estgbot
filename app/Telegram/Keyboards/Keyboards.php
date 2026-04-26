@@ -11,7 +11,7 @@ class Keyboards
     {
         return Keyboard::make([
             'keyboard' => [
-                [['text' => '📘 Меню'], ['text' => '🛒 Корзина']],
+                [['text' => '📘 Меню'], ['text' => '🛒 Кошик']],
                 [['text' => '🔍 Пошук'], ['text' => '📜 Замовлення']],
                 [['text' => '❓ FAQ'], ['text' => '📱 Контакти']],
             ],

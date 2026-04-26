@@ -58,7 +58,7 @@ class TelegramService implements TelegramServiceInterface
         '📘 Меню' => 'menu',
         '📱 Контакти' => 'contacts',
         '❓ FAQ' => 'faq',
-        '🛒 Корзина' => 'cart',
+        '🛒 Кошик' => 'cart',
         '📜 Замовлення' => 'order',
     ];
 
