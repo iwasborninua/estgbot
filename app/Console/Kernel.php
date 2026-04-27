@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->call([new \App\Telegram\Monitor\Monitor, 'checkBlogs'])->hourly();
     }
 
     /**

@@ -112,4 +112,5 @@ return [
 
     'password_timeout' => 10800,
 
+    'sklad-monitor-keyword' => env('SKLAD_MONITOR_CHECK_KEYWORD')
 ];

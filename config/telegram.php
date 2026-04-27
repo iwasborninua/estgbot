@@ -53,6 +53,10 @@ return [
             'webhook_url' => 'https://api.errors-seeds.com.ua/verify-channel',
 
         ],
+        'es_monitor_admin_bot' => [
+            'token' => env('ES_MONITOR_ADMIN_BOT_TOKEN'),
+            'monitor_tg_id' => env('ES_MONITOR_TG_ID')
+        ]
     ],
 
     /*
