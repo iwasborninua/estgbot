@@ -3,6 +3,7 @@
 use App\Models\Category;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 
 /*
@@ -43,3 +44,10 @@ Route::post('/webhook', [\App\Http\Controllers\TelegramController::class, 'shop'
 Route::post('/verify-chat', [\App\Http\Controllers\TelegramController::class, 'verifyChat']);
 Route::post('/verify-channel', [\App\Http\Controllers\TelegramController::class, 'verifyChannel']);
 
+Route::get('test-monitor-bot', function (){
+    Telegram::bot('es_monitor_admin_bot')->sendMessage([
+        'chat_id' => config('telegram.bots.es_monitor_admin_bot.monitor_tg_id'),
+        'text' => 'test',
+        'parse_mode' => 'HTML'
+    ]);
+});
