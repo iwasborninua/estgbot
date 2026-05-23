@@ -14,6 +14,7 @@ class Monitor
         if ($data){
             foreach ($data as $res){{
                 if ($res['http_code'] !== 200){
+                    if ($res['http_code'] == 502 and $res['url'] == 'https://carpathians-seeds.com') continue;
                     $message.= 'Проблема с ' . $res['url'] . ' статус ' . $res['http_code'] . ($res['message'] ? ". {$res['$message']}" : '') . PHP_EOL ;
                 }
             }}
