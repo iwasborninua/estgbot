@@ -216,5 +216,22 @@ class TelegramService implements TelegramServiceInterface
     {
         cache()->forget(Auth::id() . self::NEXT_ACTION);
     }
+
+    public function MyChatMemberHandler(Update $update): void
+    {
+        $newStatus = $update->myChatMember->newChatMember->status;
+        $userId = $update->myChatMember->from->id;
+
+        if ($newStatus === 'kicked') {
+            Log::info("Пользователь {$userId} заблокировал бота.");
+            // User::query()->where('id', $userId)->update(['is_active' => false]);
+
+        }
+
+        if ($newStatus === 'member') {
+            Log::info("Пользователь {$userId} разблокировал бота.");
+
+        }
+    }
 }
 
