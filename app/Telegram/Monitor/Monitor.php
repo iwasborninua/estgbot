@@ -20,7 +20,6 @@ class Monitor
             }}
         }else{
             $message = 'Пустой ответ от сервера ' . config('constants.sklad_monitor_check_url');
-
         }
 
         if($message){
@@ -28,7 +27,7 @@ class Monitor
         }
     }
 
-    private function sendToChannel($message): void
+    public function sendToChannel($message): void
     {
         try {
             Telegram::bot('es_monitor_admin_bot')->sendMessage([
